@@ -1,0 +1,34 @@
+button {
+    display: block;
+    outline: none;
+    padding: 2vh;
+    width: 100%;
+    font-size: 2em;
+    border: none;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+    background: coral;
+    border-radius: 1vw;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background: rgb(255, 140, 98);
+}
+
+button:active {
+    background: rgb(214, 115, 79);
+}
+
+button.dark {
+    background-color: #591a5c; /* Purple */
+    /* background-color: #ee9b95; */ /* Pink */
+}
+
+button.dark:hover {
+    background-color: #6e2272; /* Purple */
+}
+
+button.dark:active {
+    background-color: #3b113e; /* Purple */
+}

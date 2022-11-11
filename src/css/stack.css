@@ -1,0 +1,31 @@
+:root {
+    --stackCardWidth: 200px;
+}
+
+#stack {
+    position: absolute;
+    top: 20%;
+    left: 55%;
+    transform: translate(-55%);
+}
+
+.stackCard {
+    position: absolute;
+    width: var(--stackCardWidth);
+    /* transition opacity and transform .3s */
+    transition: opacity 1s, transform 1s;
+    opacity: 1;
+}
+
+#drawstack {
+    position: absolute;
+    top: 20%;
+    left: 45%;
+    transform: translate(-55%);
+}
+
+.drawTurn {
+    opacity: 0;
+    transform: translateY(70vh) !important;
+    scale: 0.7;
+}

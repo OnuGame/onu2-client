@@ -1,0 +1,12 @@
+.screen {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: -100vh;
+    transition: top 1s;
+    /* background-color: red; */
+}
+
+.screen.active {
+    top: 0;
+}

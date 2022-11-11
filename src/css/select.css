@@ -1,0 +1,24 @@
+select {
+    display: block;
+    outline: none;
+    padding: 2vh;
+    width: 100%;
+    font-size: 2em;
+    border: none;
+    background: coral;
+    border-radius: 1vw;
+    transition: background-color 0.2s;
+}
+
+select.dark {
+    background-color: #591a5c; /* Purple */
+    /* background-color: #ee9b95; */ /* Pink */
+}
+
+select.dark:hover {
+    background-color: #6e2272; /* Purple */
+}
+
+select.dark:active {
+    background-color: #3b113e; /* Purple */
+}

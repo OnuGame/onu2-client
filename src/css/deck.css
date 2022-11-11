@@ -1,0 +1,12 @@
+#deck {
+    bottom: 2vh;
+    left: 50%;
+    transform: translate(-55%);
+    position: absolute;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}

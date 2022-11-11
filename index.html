@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Onu2</title>
+        <style>
+            @font-face {
+                font-family: lebogoFont;
+                src: url("./assets/fonts/lebogo-font.woff");
+            }
+        </style>
+    </head>
+    <body class="light">
+        <img src="./assets/images/Onu.png" alt="OnuLogo" id="OnuLogo" class="light" />
+        <div id="startScreen" class="screen">
+            <div class="menu">
+                <div class="input-group">
+                    <label for="usernameInput">Username:</label>
+                    <input
+                        type="text"
+                        maxlength="20"
+                        placeholder="Username"
+                        class="text-input"
+                        autocomplete="off"
+                        id="usernameInput"
+                    />
+                </div>
+                <div class="input-group">
+                    <label for="lobbycodeInput">Lobby Code:</label>
+                    <input
+                        type="text"
+                        maxlength="20"
+                        placeholder="Lobby Code"
+                        class="text-input"
+                        autocomplete="off"
+                        id="lobbycodeInput"
+                    />
+                </div>
+                <button id="joinGameButton" class="light">Join/Create Game</button>
+            </div>
+        </div>
+
+        <div id="lobbyScreen" class="screen">
+            <ol id="lobbyPlayerlist"></ol>
+            <div class="menu" id="lobbyMenu">
+                <div id="gameSettings"></div>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <ol id="ingamePlayerlist"></ol>
+            <h1 id="title"></h1>
+            <div id="stack"></div>
+            <div id="drawstack"></div>
+            <div id="deck"></div>
+        </div>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
