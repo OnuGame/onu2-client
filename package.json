@@ -1,7 +1,7 @@
 {
-  "name": "client",
+  "name": "@lebogo/onu2-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -21,5 +21,17 @@
   "dependencies": {
     "@lebogo/eventsystem": "github:OnuGame/eventsystem",
     "@lebogo/onu2-shared": "github:OnuGame/onu2-shared"
-  }
+  },
+  "description": "A Web based client to connect to an official Onu2 server.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OnuGame/onu2-client.git"
+  },
+  "author": "LeBogo",
+  "license": "CC BY-NC-SA 4.0",
+  "bugs": {
+    "url": "https://github.com/OnuGame/onu2-client/issues"
+  },
+  "homepage": "https://github.com/OnuGame/onu2-client#readme"
 }
