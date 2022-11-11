@@ -83,6 +83,9 @@ export class GameScreen extends OnuScreen {
     }
 
     renderCards() {
+        // sort cards
+        this.baseGame.deck = sortCards(this.baseGame.deck);
+
         // create card imgs for each card in deck
         for (const card of this.baseGame.deck) {
             const cardImage = document.createElement("img");
