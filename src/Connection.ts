@@ -21,7 +21,7 @@ export class Connection extends EventSystem {
 
     public send(event: BaseEvent) {
         if (this.ws.readyState != this.ws.OPEN) throw new Error("Websocket is not open.");
-        this.ws.send(JSON.stringify(event));
+        this.ws.send(event.stringify());
     }
 
     private messageReceived(ev: { data: string }) {
