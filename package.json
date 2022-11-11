@@ -19,6 +19,7 @@
     "registry": "http://bogonas2:4873"
   },
   "dependencies": {
+    "@lebogo/eventsystem": "github:OnuGame/eventsystem",
     "@lebogo/onu2-shared": "github:OnuGame/onu2-shared"
   }
 }
