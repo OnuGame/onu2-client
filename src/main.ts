@@ -1,4 +1,4 @@
-import { Card, CardColor, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
+import { Card, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
 
 import { Connection } from "./Connection";
 import { ScreenManager } from "./ScreenManager";
@@ -22,18 +22,7 @@ export class BaseGame {
     connection: Connection;
     uuid: string | undefined;
     hash: string | undefined;
-    deck: Card[] = [
-        new Card("p2", new CardColor("r")),
-        new Card("2", new CardColor("g")),
-        new Card("p4", new CardColor("c")),
-        new Card("w", new CardColor("c")),
-        new Card("8", new CardColor("g")),
-        new Card("1", new CardColor("g")),
-        new Card("8", new CardColor("g")),
-        new Card("sw", new CardColor("r")),
-        new Card("sw", new CardColor("y")),
-        new Card("p2", new CardColor("y")),
-    ];
+    deck: Card[] = [];
     username: string | undefined;
     lobbycode: string | undefined;
 
@@ -46,9 +35,9 @@ export class BaseGame {
         });
 
         this.screenManager = new ScreenManager([
-            new GameScreen(this),
             new Startscreen(this),
             new LobbyScreen(this),
+            new GameScreen(this),
         ]);
 
         this.deck = [];
