@@ -1,4 +1,4 @@
-import { Card, UpdateDeckEvent } from "@lebogo/onu2-shared";
+import { Card, CardColor, UpdateDeckEvent } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
@@ -106,6 +106,14 @@ export class GameScreen extends OnuScreen {
         const connection = this.baseGame.connection;
 
         connection.registerEvent<UpdateDeckEvent>("UpdateDeckEvent", ({ deck }) => {
+            // convert each card entry to a real card object with a color object instead of a normal object
+            this.baseGame.deck = deck.map((card) => {
+                card.color = new CardColor(card.color.color);
+                let tempCard = new Card(card.type, card.color);
+                Object.assign(tempCard, card);
+                return tempCard;
+            });
+
             this.baseGame.deck = deck;
             this.renderCards();
         });
