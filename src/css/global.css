@@ -64,3 +64,14 @@ label {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 1vw;
 }
+
+#serverSelection {
+    /* set this element fixed to the bottom right of the screen */
+    position: absolute;
+    bottom: 2vh;
+    right: 2vh;
+    font-size: 1.2em;
+    padding: 1vh;
+    width: 200px;
+    max-width: 98vw;
+}

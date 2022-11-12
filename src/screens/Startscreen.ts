@@ -10,14 +10,71 @@ export class Startscreen extends OnuScreen {
     constructor(private baseGame: BaseGame) {
         super("startScreen");
         this.registerEvents();
+
+        this.updateServerlist();
+    }
+
+    async updateServerlist() {
+        // get serverSelection dropdown
+        const serverSelection = document.getElementById("serverSelection") as HTMLSelectElement;
+        const serverlistStatus = localStorage.getItem("serverlistStatus") || "public";
+
+        // fetch selected serverlist from github
+        // https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/development-servers.json
+        const response = await fetch(
+            `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlistStatus}-servers.json`
+        );
+        const serverlist = await response.json();
+
+        console.log(serverlist);
+
+        // clear serverSelection dropdown
+        serverSelection.innerHTML = "";
+
+        // add servers to serverSelection dropdown
+        for (const server of serverlist) {
+            const option = document.createElement("option");
+            option.value = server.server;
+            option.setAttribute("client", server.client);
+            option.setAttribute("version", server.version);
+            option.setAttribute("maintainerName", server.maintainer.name);
+            option.setAttribute("maintainerContact", server.maintainer.contact);
+            option.setAttribute("repository", server.maintainer.repository);
+
+            // if server.client is the same url as the current url, select it as default. ignore trailing slash
+            if (server.client.replace(/\/$/, "") === location.origin.replace(/\/$/, "")) {
+                option.selected = true;
+            }
+
+            option.innerText = server.name + " (" + server.version + ")";
+            serverSelection.appendChild(option);
+        }
+
+        serverSelection.addEventListener("change", () => {
+            // change location to selected server.client if it is different from the current url. ignore trailing slash
+            if (
+                serverSelection.selectedOptions[0].getAttribute("client")!.replace(/\/$/, "") !==
+                location.origin.replace(/\/$/, "")
+            ) {
+                location.href = serverSelection.selectedOptions[0].getAttribute("client")!;
+            }
+        });
     }
 
     registerEvents() {
         const connection = this.baseGame.connection;
 
-        joinGameButton.addEventListener("click", () => {
+        joinGameButton.addEventListener("click", async () => {
             this.baseGame.username = usernameInput.value;
             this.baseGame.lobbycode = lobbycodeInput.value;
+
+            // get server url from serverSelection dropdown
+            const serverSelection = document.getElementById("serverSelection") as HTMLSelectElement;
+            const serverUrl = serverSelection.selectedOptions[0].value;
+
+            connection.setServerURL(serverUrl);
+
+            await connection.connect();
             connection.send(new JoinLobbyEvent(this.baseGame.lobbycode, this.baseGame.username));
         });
 

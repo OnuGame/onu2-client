@@ -7,16 +7,37 @@ export class Connection extends EventSystem {
 
     constructor(private address: string, public autoreconnect: boolean = true) {
         super();
-        this.connect();
     }
 
-    private connect() {
-        this.ws = new WebSocket(this.address);
+    public connect() {
+        return new Promise<void>((resolve, reject) => {
+            this.ws = new WebSocket(this.address);
 
-        this.ws.onclose = this.connectionClosed.bind(this);
+            this.ws.addEventListener("close", this.connectionClosed.bind(this));
+            this.ws.addEventListener("open", this.connectionOpened.bind(this));
+            this.ws.addEventListener("message", this.messageReceived.bind(this));
 
-        this.ws.onopen = this.connectionOpened.bind(this);
-        this.ws.onmessage = this.messageReceived.bind(this);
+            // resolve when connection is opened, reject when connection is closed.
+            // remove event listeners when one of them is called
+            const connectionOpened = () => {
+                this.ws.removeEventListener("open", connectionOpened);
+                this.ws.removeEventListener("close", connectionClosed);
+                resolve();
+            };
+
+            const connectionClosed = () => {
+                this.ws.removeEventListener("open", connectionOpened);
+                this.ws.removeEventListener("close", connectionClosed);
+                reject();
+            };
+
+            this.ws.addEventListener("open", connectionOpened);
+            this.ws.addEventListener("close", connectionClosed);
+        });
+    }
+
+    public setServerURL(url: string) {
+        this.address = url;
     }
 
     public send(event: BaseEvent) {
