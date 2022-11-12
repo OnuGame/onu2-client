@@ -1,4 +1,5 @@
 import { BaseEvent, EventSystem } from "@lebogo/eventsystem";
+import { PingEvent } from "@lebogo/onu2-shared";
 
 export class Connection extends EventSystem {
     ws!: WebSocket;
@@ -7,6 +8,12 @@ export class Connection extends EventSystem {
 
     constructor(private address: string, public autoreconnect: boolean = true) {
         super();
+
+        this.registerEvent("PingEvent", (event: PingEvent) => {
+            console.log("Ping received");
+
+            this.send(new PingEvent(event.ping));
+        });
     }
 
     public connect() {
