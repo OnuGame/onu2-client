@@ -12,7 +12,7 @@
 }
 
 .hoverable {
-    transition: transform 0.4s;
+    transition: transform 0.2s;
 }
 
 .hoverable:hover {

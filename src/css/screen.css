@@ -1,12 +1,19 @@
+:root {
+    --animation-speed: 0.7s;
+}
+
 .screen {
     position: absolute;
     width: 100vw;
     height: 100vh;
     top: -100vh;
-    transition: top 1s;
+    opacity: 0;
+    /* transition top and opacity at animation speed */
+    transition: top var(--animation-speed), opacity var(--animation-speed);
     /* background-color: red; */
 }
 
 .screen.active {
     top: 0;
+    opacity: 1;
 }
