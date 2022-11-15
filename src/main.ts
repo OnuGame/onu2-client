@@ -19,6 +19,7 @@ import { DevMode } from "./DevMode";
 const PORT = 3000;
 
 export class BaseGame {
+    public static instance: BaseGame;
     screenManager: ScreenManager;
     connection: Connection;
     uuid: string | undefined;
@@ -30,6 +31,7 @@ export class BaseGame {
     lobbycode: string | undefined;
 
     constructor() {
+        BaseGame.instance = this;
         this.connection = new Connection(`ws://${location.hostname}:${PORT}`);
         this.connection.registerEvent<ReconnectedEvent>("ReconnectedEvent", () => {
             if (this.lobbycode && this.uuid) {

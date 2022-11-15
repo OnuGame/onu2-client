@@ -26,6 +26,8 @@ export class ScreenManager {
         this.screens.forEach((screen) => {
             screen.setDarkmode(on);
         });
+        this.darkmode = on;
+        localStorage.setItem("darkmode", on.toString());
     }
 
     setNextScreen() {

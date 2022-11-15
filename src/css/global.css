@@ -95,6 +95,16 @@ label {
     white-space: nowrap;
 }
 
+.devButton {
+    font-size: 1em;
+    width: auto;
+    display: inline-block;
+    padding: 1.2vh;
+    margin-top: 0.5vw;
+    margin-left: 0.5vw;
+    user-select: none;
+}
+
 #devToggle {
     width: 10px;
     height: 10px;

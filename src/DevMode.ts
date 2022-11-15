@@ -1,3 +1,6 @@
+import { BaseGame } from "./main";
+import { Startscreen } from "./screens/Startscreen";
+
 export class DevMode {
     public static instance: DevMode;
     active: boolean = false;
@@ -9,6 +12,28 @@ export class DevMode {
         DevMode.instance = this;
         this.devModeToggle.addEventListener("dblclick", () => {
             this.toggle();
+        });
+
+        document.querySelector("#themeToggle")!.addEventListener("click", () => {
+            BaseGame.instance.screenManager.setDarkmode(!BaseGame.instance.screenManager.darkmode);
+        });
+
+        const serverSelection = document.querySelector(
+            "#serverlistSelection"
+        )! as HTMLSelectElement;
+        // set current serverlist as default value
+        serverSelection.value = localStorage.getItem("serverlist") || "default";
+
+        serverSelection.addEventListener("change", (e) => {
+            const target = e.target as HTMLSelectElement;
+            const serverlist = target.value;
+            localStorage.setItem("serverlist", serverlist);
+            // check if BaseGame.instance.screenManager.activeScreen is Startscreen
+            // if yes, reload serverlist in startscreen
+            // if no, do nothing
+            if (BaseGame.instance.screenManager.activeScreen.name == "startScreen") {
+                (BaseGame.instance.screenManager.activeScreen as Startscreen).updateServerlist();
+            }
         });
     }
 

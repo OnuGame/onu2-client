@@ -18,20 +18,20 @@ export class Startscreen extends OnuScreen {
     async updateServerlist() {
         // get serverSelection dropdown
         const serverSelection = document.getElementById("serverSelection") as HTMLSelectElement;
-        const serverlistStatus = localStorage.getItem("serverlistStatus") || "public";
+        const serverlist = localStorage.getItem("serverlist") || "public";
 
         // fetch selected serverlist from github
         // https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/development-servers.json
         const response = await fetch(
-            `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlistStatus}-servers.json`
+            `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlist}-servers.json`
         );
-        const serverlist = await response.json();
+        const servers = await response.json();
 
         // clear serverSelection dropdown
         serverSelection.innerHTML = "";
 
         // add servers to serverSelection dropdown
-        for (const server of serverlist) {
+        for (const server of servers) {
             const option = document.createElement("option");
             option.value = server.server;
             option.setAttribute("client", server.client);
