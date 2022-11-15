@@ -1,4 +1,5 @@
 import { JoinedLobbyEvent, JoinLobbyEvent } from "@lebogo/onu2-shared";
+import { DevMode } from "../DevMode";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
@@ -26,8 +27,6 @@ export class Startscreen extends OnuScreen {
         );
         const serverlist = await response.json();
 
-        console.log(serverlist);
-
         // clear serverSelection dropdown
         serverSelection.innerHTML = "";
 
@@ -48,6 +47,10 @@ export class Startscreen extends OnuScreen {
 
             option.innerText = server.name + " (" + server.version + ")";
             serverSelection.appendChild(option);
+
+            DevMode.log(
+                `🌐 Server: ${server.name} (${server.version}) | Client: ${server.client} | Maintainer: ${server.maintainer.name} (${server.maintainer.contact})`
+            );
         }
 
         serverSelection.addEventListener("change", () => {

@@ -75,3 +75,34 @@ label {
     width: 200px;
     max-width: 98vw;
 }
+
+#debugOutput {
+    /* display: none; */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    /* flex-direction: column; */
+    position: absolute;
+    top: 30vh;
+    left: 0;
+    height: 70vh;
+    width: 35vw;
+    overflow: auto;
+}
+
+#debugLog * {
+    font-family: sans-serif;
+    color: rgb(196, 196, 196);
+    white-space: nowrap;
+}
+
+#devToggle {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#devToggle.active {
+    background-color: green;
+}

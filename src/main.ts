@@ -14,6 +14,7 @@ import "./css/playerlist.css";
 import "./css/screen.css";
 import "./css/select.css";
 import "./css/stack.css";
+import { DevMode } from "./DevMode";
 
 const PORT = 3000;
 
@@ -46,4 +47,5 @@ export class BaseGame {
     }
 }
 
+new DevMode();
 new BaseGame();

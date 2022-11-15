@@ -1,5 +1,6 @@
 import { BaseEvent, EventSystem } from "@lebogo/eventsystem";
 import { PingEvent } from "@lebogo/onu2-shared";
+import { DevMode } from "./DevMode";
 
 export class Connection extends EventSystem {
     ws!: WebSocket;
@@ -10,13 +11,12 @@ export class Connection extends EventSystem {
         super();
 
         this.registerEvent("PingEvent", (event: PingEvent) => {
-            console.log("Ping received");
-
             this.send(new PingEvent(event.ping));
         });
     }
 
     public connect() {
+        DevMode.log(`⌛ Connecting to ${this.address}...`);
         return new Promise<void>((resolve, reject) => {
             this.ws = new WebSocket(this.address);
 
@@ -49,22 +49,24 @@ export class Connection extends EventSystem {
 
     public send(event: BaseEvent) {
         if (this.ws.readyState != this.ws.OPEN) throw new Error("Websocket is not open.");
+        DevMode.log("↗️" + event.stringify());
         this.ws.send(event.stringify());
     }
 
     private messageReceived(ev: { data: string }) {
+        DevMode.log("↙️" + ev.data);
         this.parse(ev.data);
     }
 
     private connectionOpened() {
         if (this.id) return;
-        console.log("Connected to server!");
+        DevMode.log("✔️ Connected to server!");
     }
 
     private connectionClosed() {
         if (this.autoreconnect) {
             setTimeout(() => {
-                console.log("Connection failed. Trying to reconnect...");
+                DevMode.log("Connection failed. Trying to reconnect...");
                 this.connect();
             }, 1000);
         }
