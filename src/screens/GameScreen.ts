@@ -37,7 +37,6 @@ function sortCards(cards: Card[]) {
 export class GameScreen extends OnuScreen {
     constructor(private baseGame: BaseGame) {
         super("gameScreen");
-        console.log("new onu game created");
         this.registerEvents();
 
         this.populateDrawstack();
@@ -62,7 +61,6 @@ export class GameScreen extends OnuScreen {
     }
 
     drawClicked() {
-        console.log("drawing cards");
         // get top most card of drawstack (last child of drawstack)
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
         const card = drawStack.lastChild as HTMLImageElement;
