@@ -1,4 +1,4 @@
-import { Card, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
+import { Card, CardColor, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
 
 import { Connection } from "./Connection";
 import { ScreenManager } from "./ScreenManager";
@@ -22,6 +22,8 @@ export class BaseGame {
     connection: Connection;
     uuid: string | undefined;
     hash: string | undefined;
+    drawAmount: number = 1;
+    topCard: Card | undefined = new Card("p2", new CardColor("r"));
     deck: Card[] = [];
     username: string | undefined;
     lobbycode: string | undefined;

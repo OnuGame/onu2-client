@@ -1,4 +1,4 @@
-import { Card, CardColor, UpdateDeckEvent } from "@lebogo/onu2-shared";
+import { Card, CardColor, CardRequestEvent, UpdateDeckEvent } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
@@ -58,7 +58,7 @@ export class GameScreen extends OnuScreen {
             drawStack.appendChild(cardImage);
         }
 
-        drawStack.onclick = this.drawClicked;
+        drawStack.onclick = this.drawClicked.bind(this);
     }
 
     drawClicked() {
@@ -66,8 +66,6 @@ export class GameScreen extends OnuScreen {
         // get top most card of drawstack (last child of drawstack)
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
         const card = drawStack.lastChild as HTMLImageElement;
-        console.log(card);
-
         card.classList.add("drawTurn");
 
         setTimeout(() => {
@@ -75,6 +73,9 @@ export class GameScreen extends OnuScreen {
             drawStack.prepend(card);
             card.classList.remove("drawTurn");
         }, 1000);
+
+        // send draw event to server
+        this.baseGame.connection.send(new CardRequestEvent());
     }
 
     cardClcked(card: Card) {
@@ -86,6 +87,10 @@ export class GameScreen extends OnuScreen {
         // sort cards
         this.baseGame.deck = sortCards(this.baseGame.deck);
 
+        // clear all cards in current deck
+        const deckElement = document.getElementById("deck") as HTMLDivElement;
+        deckElement.innerHTML = "";
+
         // create card imgs for each card in deck
         for (const card of this.baseGame.deck) {
             const cardImage = document.createElement("img");
@@ -94,10 +99,16 @@ export class GameScreen extends OnuScreen {
             cardImage.classList.add("hoverable");
             cardImage.classList.add(this.theme);
             cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
-            cardImage.addEventListener("click", () => {
-                this.cardClcked(card);
-            });
-            document.getElementById("deck")?.appendChild(cardImage);
+            // check if card is compatible with the top card. if it is not compatible, add the disabled class and disable the onclick event
+            console.log(card, this.baseGame.topCard?.compare(card));
+
+            if (!this.baseGame.topCard?.compare(card)) {
+                cardImage.classList.add("disabled");
+            } else {
+                cardImage.onclick = this.cardClcked.bind(this, card);
+            }
+
+            deckElement.appendChild(cardImage);
         }
         console.log(this.baseGame.deck);
     }
