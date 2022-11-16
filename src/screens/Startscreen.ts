@@ -49,7 +49,8 @@ export class Startscreen extends OnuScreen {
             serverSelection.appendChild(option);
 
             DevMode.log(
-                `🌐 Server: ${server.name} (${server.version}) | Client: ${server.client} | Maintainer: ${server.maintainer.name} (${server.maintainer.contact})`
+                "🌐",
+                `Server: ${server.name} (${server.version}) | Client: ${server.client} | Maintainer: ${server.maintainer.name} (${server.maintainer.contact})`
             );
         }
 

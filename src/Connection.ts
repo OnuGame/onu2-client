@@ -16,7 +16,7 @@ export class Connection extends EventSystem {
     }
 
     public connect() {
-        DevMode.log(`⌛ Connecting to ${this.address}...`);
+        DevMode.log("⌛", `Connecting to ${this.address}...`);
         return new Promise<void>((resolve, reject) => {
             this.ws = new WebSocket(this.address);
 
@@ -49,24 +49,24 @@ export class Connection extends EventSystem {
 
     public send(event: BaseEvent) {
         if (this.ws.readyState != this.ws.OPEN) throw new Error("Websocket is not open.");
-        DevMode.log("↗️" + event.stringify());
+        DevMode.log("↗️", event.stringify());
         this.ws.send(event.stringify());
     }
 
     private messageReceived(ev: { data: string }) {
-        DevMode.log("↙️" + ev.data);
+        DevMode.log("↙️", ev.data);
         this.parse(ev.data);
     }
 
     private connectionOpened() {
         if (this.id) return;
-        DevMode.log("✔️ Connected to server!");
+        DevMode.log("✅", "Connected to server!");
     }
 
     private connectionClosed() {
         if (this.autoreconnect) {
             setTimeout(() => {
-                DevMode.log("Connection failed. Trying to reconnect...");
+                DevMode.log("❌", "Connection failed. Trying to reconnect...");
                 this.connect();
             }, 1000);
         }

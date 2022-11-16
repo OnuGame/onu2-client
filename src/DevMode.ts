@@ -52,9 +52,9 @@ export class DevMode {
         }
     }
 
-    static log(message: string) {
+    static log(emoji: string, message: string) {
         const li = document.createElement("li");
-        li.innerHTML = message;
+        li.innerHTML = `${emoji} ${message}`;
         // insert new log at the top
         DevMode.instance.debugLog.insertBefore(li, DevMode.instance.debugLog.firstChild);
         // DevMode.instance.debugLog.appendChild(li);
