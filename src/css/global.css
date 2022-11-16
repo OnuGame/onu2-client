@@ -87,6 +87,7 @@ label {
     height: 70vh;
     width: 35vw;
     overflow: auto;
+    resize: both;
 }
 
 #debugLog * {
