@@ -38,7 +38,10 @@ export class GameScreen extends OnuScreen {
     constructor(private baseGame: BaseGame) {
         super("gameScreen");
         this.registerEvents();
+    }
 
+    setActive(): void {
+        super.setActive();
         this.populateDrawstack();
     }
 
@@ -46,8 +49,10 @@ export class GameScreen extends OnuScreen {
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
         const maxAngle = 20;
 
-        // create 10 cards for drawstack
-        for (let i = 0; i < 10; i++) {
+        drawStack.innerHTML = "";
+
+        // create 40 cards for drawstack
+        for (let i = 0; i < 40; i++) {
             const cardImage = document.createElement("img");
             cardImage.src = `/assets/cards/cardback.png`;
             cardImage.classList.add("card");
@@ -61,24 +66,32 @@ export class GameScreen extends OnuScreen {
     }
 
     drawClicked() {
-        // get top most card of drawstack (last child of drawstack)
+        // get the last child of drawstack that does not have the drawTurn class applied
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
-        const card = drawStack.lastChild as HTMLImageElement;
-        card.classList.add("drawTurn");
+        const drawStackChildren = drawStack.children;
+        let topMost: HTMLElement | null = null;
+        for (let i = drawStackChildren.length - 1; i >= 0; i--) {
+            const child = drawStackChildren[i] as HTMLElement;
+            if (!child.classList.contains("drawTurn")) {
+                topMost = child;
+                break;
+            }
+        }
+
+        topMost!.classList.add("drawTurn");
 
         setTimeout(() => {
             // move card to first element of drawstack and remove drawTurn class
-            drawStack.prepend(card);
-            card.classList.remove("drawTurn");
+            drawStack.prepend(topMost!);
+            topMost!.classList.remove("drawTurn");
         }, 1000);
 
         // send draw event to server
         this.baseGame.connection.send(new CardRequestEvent());
     }
 
-    cardClcked(card: Card) {
+    cardClicked(card: Card) {
         console.log("Card clicked");
-        console.log(card);
     }
 
     renderCards() {
@@ -98,17 +111,15 @@ export class GameScreen extends OnuScreen {
             cardImage.classList.add(this.theme);
             cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
             // check if card is compatible with the top card. if it is not compatible, add the disabled class and disable the onclick event
-            console.log(card, this.baseGame.topCard?.compare(card));
 
             if (!this.baseGame.topCard?.compare(card)) {
                 cardImage.classList.add("disabled");
             } else {
-                cardImage.onclick = this.cardClcked.bind(this, card);
+                cardImage.onclick = this.cardClicked.bind(this, card);
             }
 
             deckElement.appendChild(cardImage);
         }
-        console.log(this.baseGame.deck);
     }
 
     registerEvents() {
@@ -126,7 +137,5 @@ export class GameScreen extends OnuScreen {
             this.baseGame.deck = deck;
             this.renderCards();
         });
-
-        this.renderCards();
     }
 }

@@ -25,6 +25,7 @@
 }
 
 .drawTurn {
+    pointer-events: none;
     opacity: 0;
     transform: translateY(70vh) !important;
     scale: 0.7;
