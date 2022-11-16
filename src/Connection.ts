@@ -49,12 +49,18 @@ export class Connection extends EventSystem {
 
     public send(event: BaseEvent) {
         if (this.ws.readyState != this.ws.OPEN) throw new Error("Websocket is not open.");
-        DevMode.log("↗️", event.stringify());
+        // if (event.name != "PingEvent") {
+        //     DevMode.log("↗️", event.stringify());
+        // }
         this.ws.send(event.stringify());
     }
 
     private messageReceived(ev: { data: string }) {
-        DevMode.log("↙️", ev.data);
+        // if (JSON.parse(ev.data).name != "PingEvent") {
+        //     DevMode.log("↙️", ev.data);
+        // } else {
+        //     DevMode.log("🛑", ev.data);
+        // }
         this.parse(ev.data);
     }
 

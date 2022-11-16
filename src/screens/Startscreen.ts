@@ -12,10 +12,13 @@ export class Startscreen extends OnuScreen {
         super("startScreen");
         this.registerEvents();
 
+        // add updateServerlist to the window object so it can be called from the console
+        (window as any).updateServerlist = this.updateServerlist;
+
         this.updateServerlist();
     }
 
-    async updateServerlist() {
+    async updateServerlist(customServerlist?: string) {
         // get serverSelection dropdown
         const serverSelection = document.getElementById("serverSelection") as HTMLSelectElement;
         const serverlist = localStorage.getItem("serverlist") || "public";
@@ -23,7 +26,8 @@ export class Startscreen extends OnuScreen {
         // fetch selected serverlist from github
         // https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/development-servers.json
         const response = await fetch(
-            `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlist}-servers.json`
+            customServerlist ||
+                `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlist}-servers.json`
         );
         const servers = await response.json();
 
