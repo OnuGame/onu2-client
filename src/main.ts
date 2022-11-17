@@ -8,6 +8,7 @@ import { Startscreen } from "./screens/Startscreen";
 
 import "./css/button.css";
 import "./css/card.css";
+import "./css/colorselect.css";
 import "./css/deck.css";
 import "./css/global.css";
 import "./css/playerlist.css";

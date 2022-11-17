@@ -1,0 +1,34 @@
+#cs-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000000;
+    padding: 10vh;
+    display: none;
+    grid-template-columns: 50% 50%;
+    border-radius: 50%;
+    user-select: none;
+}
+
+#cs-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(5deg);
+    z-index: 4;
+    height: 60vh;
+}
+
+.cs {
+    height: 16vh;
+    width: auto;
+    margin: 4vh;
+    display: inline-block;
+    z-index: 100001;
+    filter: brightness(0.8);
+}
+
+.cs:hover {
+    filter: saturate(2) brightness(1.2) url(#glow);
+}

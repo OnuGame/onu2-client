@@ -1,8 +1,10 @@
 import {
     Card,
     CardColor,
+    CardColorType,
     CardPlacedEvent,
     CardRequestEvent,
+    ColorWishEvent,
     UpdateDeckEvent,
 } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
@@ -146,6 +148,19 @@ export class GameScreen extends OnuScreen {
                 drawStack.prepend(topMost!);
                 topMost!.classList.remove("drawTurn");
             }, 1000);
+        });
+
+        connection.registerEvent<ColorWishEvent>("ColorWishEvent", () => {
+            console.log("Lol wünsch dir was");
+
+            (document.querySelector("#cs-container") as HTMLDivElement).style.display = "grid";
+        });
+
+        document.querySelectorAll(".cs").forEach((element) => {
+            element.addEventListener("click", () => {
+                connection.send(new ColorWishEvent(element.id as CardColorType));
+                (document.querySelector("#cs-container") as HTMLDivElement).style.display = "none";
+            });
         });
 
         connection.registerEvent<CardPlacedEvent>("CardPlacedEvent", ({ card }) => {
