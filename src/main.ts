@@ -30,6 +30,7 @@ export class BaseGame {
     deck: Card[] = [];
     username: string | undefined;
     lobbycode: string | undefined;
+    isTurn: boolean = false;
 
     constructor() {
         BaseGame.instance = this;

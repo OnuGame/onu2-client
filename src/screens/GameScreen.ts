@@ -5,6 +5,7 @@ import {
     CardPlacedEvent,
     CardRequestEvent,
     ColorWishEvent,
+    PlayerTurnEvent,
     UpdateDeckEvent,
 } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
@@ -100,7 +101,7 @@ export class GameScreen extends OnuScreen {
             cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
             // check if card is compatible with the top card. if it is not compatible, add the disabled class and disable the onclick event
 
-            if (!this.baseGame.topCard?.compare(card)) {
+            if (!this.baseGame.topCard?.compare(card) || !this.baseGame.isTurn) {
                 cardImage.classList.add("disabled");
             } else {
                 cardImage.onclick = this.cardClicked.bind(this, card);
@@ -161,6 +162,11 @@ export class GameScreen extends OnuScreen {
                 connection.send(new ColorWishEvent(element.id as CardColorType));
                 (document.querySelector("#cs-container") as HTMLDivElement).style.display = "none";
             });
+        });
+
+        connection.registerEvent<PlayerTurnEvent>("PlayerTurnEvent", ({ uuid }) => {
+            this.baseGame.isTurn = uuid === this.baseGame.uuid;
+            this.renderCards();
         });
 
         connection.registerEvent<CardPlacedEvent>("CardPlacedEvent", ({ card }) => {
