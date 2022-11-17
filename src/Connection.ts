@@ -55,10 +55,7 @@ export class Connection extends EventSystem {
 
     private messageReceived(ev: { data: string }) {
         DevMode.log("↙️", ev.data);
-        let json = JSON.parse(ev.data);
-        json.name = json.n;
-        delete json.n;
-        this.parse(JSON.stringify(json));
+        this.parse(ev.data);
     }
 
     private connectionOpened() {
