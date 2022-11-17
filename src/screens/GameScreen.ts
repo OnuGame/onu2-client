@@ -1,4 +1,10 @@
-import { Card, CardColor, CardRequestEvent, UpdateDeckEvent } from "@lebogo/onu2-shared";
+import {
+    Card,
+    CardColor,
+    CardPlacedEvent,
+    CardRequestEvent,
+    UpdateDeckEvent,
+} from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
@@ -66,32 +72,12 @@ export class GameScreen extends OnuScreen {
     }
 
     drawClicked() {
-        // get the last child of drawstack that does not have the drawTurn class applied
-        const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
-        const drawStackChildren = drawStack.children;
-        let topMost: HTMLElement | null = null;
-        for (let i = drawStackChildren.length - 1; i >= 0; i--) {
-            const child = drawStackChildren[i] as HTMLElement;
-            if (!child.classList.contains("drawTurn")) {
-                topMost = child;
-                break;
-            }
-        }
-
-        topMost!.classList.add("drawTurn");
-
-        setTimeout(() => {
-            // move card to first element of drawstack and remove drawTurn class
-            drawStack.prepend(topMost!);
-            topMost!.classList.remove("drawTurn");
-        }, 1000);
-
         // send draw event to server
         this.baseGame.connection.send(new CardRequestEvent());
     }
 
     cardClicked(card: Card) {
-        console.log("Card clicked");
+        this.baseGame.connection.send(new CardPlacedEvent(card));
     }
 
     renderCards() {
@@ -135,6 +121,45 @@ export class GameScreen extends OnuScreen {
             });
 
             this.baseGame.deck = deck;
+            this.renderCards();
+        });
+
+        connection.registerEvent<CardRequestEvent>("CardRequestEvent", () => {
+            // Drawing card was successful. Play card draw animation
+
+            // get the last child of drawstack that does not have the drawTurn class applied
+            const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
+            const drawStackChildren = drawStack.children;
+            let topMost: HTMLElement | null = null;
+            for (let i = drawStackChildren.length - 1; i >= 0; i--) {
+                const child = drawStackChildren[i] as HTMLElement;
+                if (!child.classList.contains("drawTurn")) {
+                    topMost = child;
+                    break;
+                }
+            }
+
+            topMost!.classList.add("drawTurn");
+
+            setTimeout(() => {
+                // move card to first element of drawstack and remove drawTurn class
+                drawStack.prepend(topMost!);
+                topMost!.classList.remove("drawTurn");
+            }, 1000);
+        });
+
+        connection.registerEvent<CardPlacedEvent>("CardPlacedEvent", ({ card }) => {
+            // convert card to a real card object with a color object instead of a normal object
+            card.color = new CardColor(card.color.color);
+            let tempCard = new Card(card.type, card.color);
+            Object.assign(tempCard, card);
+
+            // add card to the stack
+            this.baseGame.topCard = tempCard;
+
+            // remove card from deck if it exists
+            this.baseGame.deck = this.baseGame.deck.filter((c) => c.id !== card.id);
+
             this.renderCards();
         });
     }
