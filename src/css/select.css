@@ -11,14 +11,13 @@ select {
 }
 
 select.dark {
-    background-color: #591a5c; /* Purple */
-    /* background-color: #ee9b95; */ /* Pink */
+    background-color: #5c1a1a;
 }
 
 select.dark:hover {
-    background-color: #6e2272; /* Purple */
+    background-color: #722222;
 }
 
 select.dark:active {
-    background-color: #3b113e; /* Purple */
+    background-color: #3e1111;
 }
