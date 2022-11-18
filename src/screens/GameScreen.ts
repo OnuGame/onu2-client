@@ -7,6 +7,7 @@ import {
     ColorWishEvent,
     PlayerTurnEvent,
     UpdateDeckEvent,
+    UpdateDrawAmountEvent,
 } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
@@ -101,12 +102,14 @@ export class GameScreen extends OnuScreen {
             cardImage.classList.add("hoverable");
             cardImage.classList.add(this.theme);
             cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
-            // check if card is compatible with the top card. if it is not compatible, add the disabled class and disable the onclick event
 
-            if (!this.baseGame.topCard?.compare(card) || !this.baseGame.isTurn) {
-                cardImage.classList.add("disabled");
-            } else {
+            const isCompatible = this.baseGame.topCard?.compare(card);
+            const isPlayersTurn = this.baseGame.isTurn;
+            const drawCard = this.baseGame.drawAmount > 1 && ["p2", "p4"].includes(card.type);
+            if (isCompatible && isPlayersTurn && (drawCard || this.baseGame.drawAmount === 1)) {
                 cardImage.onclick = this.cardClicked.bind(this, card);
+            } else {
+                cardImage.classList.add("disabled");
             }
 
             deckElement.appendChild(cardImage);
@@ -128,6 +131,16 @@ export class GameScreen extends OnuScreen {
             this.baseGame.deck = deck;
             this.renderCards();
         });
+
+        connection.registerEvent<UpdateDrawAmountEvent>(
+            "UpdateDrawAmountEvent",
+            ({ drawAmount }) => {
+                this.baseGame.drawAmount = drawAmount;
+                let displayAmount = drawAmount.toString();
+                if (drawAmount === 1) displayAmount = ""; // if draw amount is 1, dont show it
+                document.querySelector("#drawAmount")!.innerHTML = displayAmount;
+            }
+        );
 
         connection.registerEvent<CardRequestEvent>("CardRequestEvent", () => {
             // Drawing card was successful. Play card draw animation
@@ -154,8 +167,6 @@ export class GameScreen extends OnuScreen {
         });
 
         connection.registerEvent<ColorWishEvent>("ColorWishEvent", () => {
-            console.log("Lol wünsch dir was");
-
             (document.querySelector("#cs-container") as HTMLDivElement).style.display = "grid";
         });
 
