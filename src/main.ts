@@ -1,5 +1,7 @@
 import { Card, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
 
+import * as config from "../package.json";
+
 import { Connection } from "./Connection";
 import { ScreenManager } from "./ScreenManager";
 import { GameScreen } from "./screens/GameScreen";
@@ -53,3 +55,4 @@ export class BaseGame {
 
 new DevMode();
 new BaseGame();
+document.querySelector("#versionNumber")!.innerHTML = `V${config.version} by ${config.author}`;
