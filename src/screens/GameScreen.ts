@@ -44,6 +44,7 @@ function sortCards(cards: Card[]) {
 }
 
 export class GameScreen extends OnuScreen {
+    private maxAngle = 20;
     constructor(private baseGame: BaseGame) {
         super("gameScreen");
         this.registerEvents();
@@ -56,7 +57,6 @@ export class GameScreen extends OnuScreen {
 
     populateDrawstack() {
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
-        const maxAngle = 20;
 
         drawStack.innerHTML = "";
 
@@ -67,7 +67,9 @@ export class GameScreen extends OnuScreen {
             cardImage.classList.add("card");
             cardImage.classList.add("stackCard");
             cardImage.classList.add(this.theme);
-            cardImage.style.transform = `rotate(${Math.random() * maxAngle - maxAngle / 2}deg)`;
+            cardImage.style.transform = `rotate(${
+                Math.random() * this.maxAngle - this.maxAngle / 2
+            }deg)`;
             drawStack.appendChild(cardImage);
         }
 
@@ -177,6 +179,30 @@ export class GameScreen extends OnuScreen {
 
             // add card to the stack
             this.baseGame.topCard = tempCard;
+
+            // add the card to the stack
+            const stackElement = document.getElementById("stack") as HTMLDivElement;
+            const cardImage = document.createElement("img");
+            cardImage.src = `/assets/cards/${card.type}.png`;
+            cardImage.classList.add("card");
+            cardImage.classList.add("stackCard");
+            cardImage.classList.add(this.theme);
+            cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
+            // apply random rotation to card
+            cardImage.style.transform = `rotate(${
+                Math.random() * this.maxAngle - this.maxAngle / 2
+            }deg)`;
+
+            cardImage.setAttribute("id", card.id);
+            stackElement.appendChild(cardImage);
+
+            // remove old cards from stack (only keep the last 10)
+            const stackChildren = stackElement.children;
+            if (stackChildren.length > 10) {
+                for (let i = 0; i < stackChildren.length - 10; i++) {
+                    stackChildren[i].remove();
+                }
+            }
 
             // remove card from deck if it exists
             this.baseGame.deck = this.baseGame.deck.filter((c) => c.id !== card.id);

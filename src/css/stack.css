@@ -2,26 +2,22 @@
     --stackCardWidth: 200px;
 }
 
-#stack {
+#stacks {
+    display: grid;
+    grid-template-columns: repeat(2, min(var(--stackCardWidth), 40vw));
+    gap: 1vw;
     position: absolute;
     top: 20%;
-    left: 55%;
-    transform: translate(-55%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .stackCard {
     position: absolute;
-    width: var(--stackCardWidth);
+    width: min(var(--stackCardWidth), 40vw);
     /* transition opacity and transform .3s */
     transition: opacity 1s, transform 1s, scale 1s;
     opacity: 1;
-}
-
-#drawstack {
-    position: absolute;
-    top: 20%;
-    left: 45%;
-    transform: translate(-55%);
 }
 
 .drawTurn {
