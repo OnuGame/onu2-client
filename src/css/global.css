@@ -65,6 +65,27 @@ label {
     border-radius: 1vw;
 }
 
+@keyframes wiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(2deg);
+    }
+
+    75% {
+        transform: rotate(-2deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.text-input.invalid {
+    animation: wiggle 0.25s ease-in-out;
+    /* wait 5 seconds between animations */
+}
+
 .text-input.dark {
     background: rgba(204, 41, 41, 0.2);
 }

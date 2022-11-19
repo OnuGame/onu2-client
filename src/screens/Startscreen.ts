@@ -77,6 +77,22 @@ export class Startscreen extends OnuScreen {
             this.baseGame.username = usernameInput.value;
             this.baseGame.lobbycode = lobbycodeInput.value;
 
+            if (this.baseGame.username == "") {
+                usernameInput.classList.add("invalid");
+                setTimeout(() => {
+                    usernameInput.classList.remove("invalid");
+                }, 250);
+                return;
+            }
+
+            if (this.baseGame.lobbycode == "") {
+                lobbycodeInput.classList.add("invalid");
+                setTimeout(() => {
+                    lobbycodeInput.classList.remove("invalid");
+                }, 250);
+                return;
+            }
+
             // get server url from serverSelection dropdown
             const serverSelection = document.getElementById("serverSelection") as HTMLSelectElement;
             const serverUrl = serverSelection.selectedOptions[0].value;
