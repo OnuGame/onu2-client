@@ -5,9 +5,11 @@ import {
     CardPlacedEvent,
     CardRequestEvent,
     ColorWishEvent,
+    GameOverEvent,
     PlayerTurnEvent,
     UpdateDeckEvent,
     UpdateDrawAmountEvent,
+    UpdatePlayerlistEvent,
 } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
@@ -119,6 +121,39 @@ export class GameScreen extends OnuScreen {
     registerEvents() {
         const connection = this.baseGame.connection;
 
+        connection.registerEvent<UpdatePlayerlistEvent>(
+            "UpdatePlayerlistEvent",
+            ({ playerlist }) => {
+                console.log("UpdatePlayerlistEvent", playerlist);
+
+                const playerList = document.getElementById("ingamePlayerlist") as HTMLUListElement;
+                playerList.innerHTML = "";
+                playerlist.forEach(({ username, active, cardCount, spectating }) => {
+                    const playerListEntry = document.createElement("li");
+                    playerListEntry.classList.add("playerlistItem");
+
+                    const usernameText = document.createElement("b");
+                    usernameText.classList.add("playerListUsernameText");
+                    usernameText.innerText = username;
+                    if (active) usernameText.classList.add("active");
+                    playerListEntry.appendChild(usernameText);
+
+                    if (!spectating) {
+                        const cardCountText = document.createElement("span");
+                        cardCountText.innerText = `: ${cardCount}`;
+                        playerListEntry.appendChild(usernameText);
+                    } else {
+                        const spectatingText = document.createElement("span");
+                        spectatingText.innerText = " (spectating)";
+                        playerListEntry.appendChild(spectatingText);
+                        playerListEntry.classList.add("spectating");
+                    }
+
+                    playerList.appendChild(playerListEntry);
+                });
+            }
+        );
+
         connection.registerEvent<UpdateDeckEvent>("UpdateDeckEvent", ({ deck }) => {
             // convert each card entry to a real card object with a color object instead of a normal object
             this.baseGame.deck = deck.map((card) => {
@@ -219,6 +254,10 @@ export class GameScreen extends OnuScreen {
             this.baseGame.deck = this.baseGame.deck.filter((c) => c.id !== card.id);
 
             this.renderCards();
+        });
+
+        connection.registerEvent<GameOverEvent>("GameOverEvent", ({}) => {
+            this.baseGame.screenManager.setActiveScreen("lobbyScreen");
         });
     }
 }

@@ -86,9 +86,8 @@ export class Startscreen extends OnuScreen {
             connection.send(new JoinLobbyEvent(this.baseGame.lobbycode, this.baseGame.username));
         });
 
-        connection.registerEvent<JoinedLobbyEvent>("JoinedLobbyEvent", ({ uuid, hash }) => {
+        connection.registerEvent<JoinedLobbyEvent>("JoinedLobbyEvent", ({ uuid }) => {
             this.baseGame.uuid = uuid;
-            this.baseGame.hash = hash;
             this.baseGame.screenManager.setActiveScreen("lobbyScreen");
         });
     }

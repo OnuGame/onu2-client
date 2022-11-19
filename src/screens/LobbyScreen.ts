@@ -1,11 +1,16 @@
-import { GameStartEvent, SettingsChangedEvent, UpdatePlayerlistEvent } from "@lebogo/onu2-shared";
+import {
+    GameStartEvent,
+    SettingsChangedEvent,
+    UpdateAdminEvent,
+    UpdatePlayerlistEvent,
+} from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
 const lobbyPlayerlist = document.getElementById("lobbyPlayerlist") as HTMLOListElement;
 
 export class LobbyScreen extends OnuScreen {
-    players: { username: string; hash: string; cardCount: number }[];
+    players: { username: string; uuid: string; cardCount: number }[];
     constructor(private baseGame: BaseGame) {
         super("lobbyScreen");
         this.players = [];
@@ -14,6 +19,26 @@ export class LobbyScreen extends OnuScreen {
 
     registerEvents() {
         const connection = this.baseGame.connection;
+
+        connection.registerEvent<UpdateAdminEvent>("UpdateAdminEvent", ({ uuid }) => {
+            this.baseGame.isAdmin = this.baseGame.uuid === uuid;
+
+            if (this.baseGame.isAdmin) {
+                document.querySelector("#startGameButton")?.remove();
+                const lobbyMenu = document.querySelector("#lobbyMenu")!;
+
+                const startButton = document.createElement("button");
+                startButton.id = "startGameButton";
+                startButton.classList.add(this.baseGame.screenManager.darkmode ? "dark" : "light");
+
+                startButton.addEventListener("click", () => {
+                    connection.send(new GameStartEvent());
+                });
+
+                startButton.innerText = "Start Game!";
+                lobbyMenu.appendChild(startButton);
+            }
+        });
 
         connection.registerEvent<UpdatePlayerlistEvent>(
             "UpdatePlayerlistEvent",
@@ -28,26 +53,6 @@ export class LobbyScreen extends OnuScreen {
 
                     lobbyPlayerlist.appendChild(playerListPlayer);
                 });
-
-                if (this.baseGame.hash == this.players[0].hash) {
-                    document.querySelector("#startGameButton")?.remove();
-
-                    // this player is admin (index 0)
-                    const lobbyMenu = document.querySelector("#lobbyMenu")!;
-
-                    const startButton = document.createElement("button");
-                    startButton.id = "startGameButton";
-                    startButton.classList.add(
-                        this.baseGame.screenManager.darkmode ? "dark" : "light"
-                    );
-
-                    startButton.addEventListener("click", () => {
-                        connection.send(new GameStartEvent());
-                    });
-
-                    startButton.innerText = "Start Game!";
-                    lobbyMenu.appendChild(startButton);
-                }
             }
         );
         connection.registerEvent<GameStartEvent>("GameStartEvent", () => {

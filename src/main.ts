@@ -26,13 +26,13 @@ export class BaseGame {
     screenManager: ScreenManager;
     connection: Connection;
     uuid: string | undefined;
-    hash: string | undefined;
     drawAmount: number = 1;
     topCard?: Card;
     deck: Card[] = [];
     username: string | undefined;
     lobbycode: string | undefined;
     isTurn: boolean = false;
+    isAdmin: boolean = false;
 
     constructor() {
         BaseGame.instance = this;

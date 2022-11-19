@@ -6,11 +6,21 @@
     left: 2vw; */
 }
 
+#ingamePlayerlist {
+    margin-top: 25vh;
+    margin-left: 5vw;
+}
+
 .playerlistItem {
     margin-left: 30px;
     font-size: 2.4rem;
 }
 
-.playerlistItem.active {
+#ingamePlayerlist .playerlistItem {
+    font-size: 1.5rem;
+    list-style: none;
+}
+
+.playerListUsernameText.active {
     color: #0a0;
 }
