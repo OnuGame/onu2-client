@@ -141,7 +141,7 @@ export class GameScreen extends OnuScreen {
                     if (!spectating) {
                         const cardCountText = document.createElement("span");
                         cardCountText.innerText = `: ${cardCount}`;
-                        playerListEntry.appendChild(usernameText);
+                        playerListEntry.appendChild(cardCountText);
                     } else {
                         const spectatingText = document.createElement("span");
                         spectatingText.innerText = " (spectating)";
