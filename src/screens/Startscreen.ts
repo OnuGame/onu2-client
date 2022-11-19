@@ -27,7 +27,8 @@ export class Startscreen extends OnuScreen {
         // https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/development-servers.json
         const response = await fetch(
             customServerlist ||
-                `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlist}-servers.json`
+                `https://raw.githubusercontent.com/OnuGame/onu2-public-data/master/data/${serverlist}-servers.json`,
+            { cache: "no-store" }
         );
         const servers = await response.json();
 
