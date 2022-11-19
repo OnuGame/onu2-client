@@ -28,7 +28,7 @@
 
 body {
     background-color: #805350;
-    background-image: url("./assets/images/cards_repeat.png");
+    background-image: url("../assets/images/cards_repeat.png");
     color: #ddd;
     animation: scrolling 100s linear infinite;
     transition: background-color 0.2s;
