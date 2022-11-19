@@ -21,6 +21,13 @@
     opacity: 1;
 }
 
+.drawTurn {
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(70vh) !important;
+    scale: 0.7;
+}
+
 #drawAmount {
     font-size: 3em;
     font-weight: bold;
