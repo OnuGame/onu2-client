@@ -1,0 +1,16 @@
+.notification {
+    position: absolute;
+    /* hide it over the top side */
+    top: -10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 1vw;
+    padding: 10px;
+    background-color: coral;
+    border-radius: 10px;
+    transition: top 0.5s ease-in-out;
+}
+
+.notification.shown {
+    top: 0;
+}

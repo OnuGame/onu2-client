@@ -1,6 +1,7 @@
 import { JoinedLobbyEvent, JoinLobbyEvent } from "@lebogo/onu2-shared";
 import { DevMode } from "../DevMode";
 import { BaseGame } from "../main";
+import { Notification } from "../Notification";
 import { OnuScreen } from "./OnuScreen";
 
 const joinGameButton = document.getElementById("joinGameButton") as HTMLButtonElement;
@@ -79,6 +80,7 @@ export class Startscreen extends OnuScreen {
 
             if (this.baseGame.username == "") {
                 usernameInput.classList.add("invalid");
+                new Notification("Please enter a username", 2000).show();
                 setTimeout(() => {
                     usernameInput.classList.remove("invalid");
                 }, 250);
@@ -87,6 +89,7 @@ export class Startscreen extends OnuScreen {
 
             if (this.baseGame.lobbycode == "") {
                 lobbycodeInput.classList.add("invalid");
+                new Notification("Please enter a lobby code", 2000).show();
                 setTimeout(() => {
                     lobbycodeInput.classList.remove("invalid");
                 }, 250);
