@@ -124,8 +124,6 @@ export class GameScreen extends OnuScreen {
         connection.registerEvent<UpdatePlayerlistEvent>(
             "UpdatePlayerlistEvent",
             ({ playerlist }) => {
-                console.log("UpdatePlayerlistEvent", playerlist);
-
                 const playerList = document.getElementById("ingamePlayerlist") as HTMLUListElement;
                 playerList.innerHTML = "";
                 playerlist.forEach(({ username, active, cardCount, spectating }) => {
@@ -214,6 +212,13 @@ export class GameScreen extends OnuScreen {
 
         connection.registerEvent<PlayerTurnEvent>("PlayerTurnEvent", ({ uuid }) => {
             this.baseGame.isTurn = uuid === this.baseGame.uuid;
+
+            let plingSound = document.createElement("audio");
+            plingSound.src = "/assets/sounds/pling.wav";
+            plingSound.play();
+            plingSound.addEventListener("ended", () => {
+                plingSound.remove();
+            });
             this.renderCards();
         });
 
@@ -257,6 +262,12 @@ export class GameScreen extends OnuScreen {
         });
 
         connection.registerEvent<GameOverEvent>("GameOverEvent", ({}) => {
+            let plingSound = document.createElement("audio");
+            plingSound.src = "/assets/sounds/won.wav";
+            plingSound.play();
+            plingSound.addEventListener("ended", () => {
+                plingSound.remove();
+            });
             this.baseGame.screenManager.setActiveScreen("lobbyScreen");
         });
     }
