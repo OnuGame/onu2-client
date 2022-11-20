@@ -74,6 +74,18 @@ export class Startscreen extends OnuScreen {
     registerEvents() {
         const connection = this.baseGame.connection;
 
+        usernameInput.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                joinGameButton.click();
+            }
+        });
+
+        lobbycodeInput.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                joinGameButton.click();
+            }
+        });
+
         joinGameButton.addEventListener("click", async () => {
             this.baseGame.username = usernameInput.value;
             this.baseGame.lobbycode = lobbycodeInput.value;
