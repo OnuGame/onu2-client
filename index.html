@@ -60,10 +60,16 @@
             </div>
             <div id="clientSettings">
                 <img
+                    id="themeToggle"
+                    class="clientSetting"
+                    src="/assets/images/lightmode.png"
+                    alt="Theme Toggle"
+                />
+                <img
                     id="musicToggle"
                     class="clientSetting"
                     src="/assets/images/music_on.png"
-                    alt="Music On"
+                    alt="Music Toggle"
                 />
             </div>
         </div>
@@ -89,7 +95,6 @@
         <div id="devToggle"></div>
 
         <div id="debugOutput">
-            <button id="themeToggle" class="devButton light">Toggle Theme</button>
             <span class="devButton light">Serverlist:</span>
             <select id="serverlistSelection" class="devButton light">
                 <option value="public">public</option>

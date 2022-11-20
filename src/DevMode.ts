@@ -14,10 +14,6 @@ export class DevMode {
             this.toggle();
         });
 
-        document.querySelector("#themeToggle")!.addEventListener("click", () => {
-            BaseGame.instance.screenManager.setDarkmode(!BaseGame.instance.screenManager.darkmode);
-        });
-
         const serverSelection = document.querySelector(
             "#serverlistSelection"
         )! as HTMLSelectElement;
