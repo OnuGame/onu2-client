@@ -1,0 +1,11 @@
+#clientSettings {
+    position: absolute;
+    bottom: 1vh;
+    right: 1vw;
+    height: 100px;
+}
+
+.clientSetting {
+    height: inherit;
+    display: inline-block;
+}

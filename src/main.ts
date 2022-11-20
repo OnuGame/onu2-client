@@ -10,6 +10,7 @@ import { Startscreen } from "./screens/Startscreen";
 
 import "./css/button.css";
 import "./css/card.css";
+import "./css/clientsettings.css";
 import "./css/colorselect.css";
 import "./css/deck.css";
 import "./css/global.css";
@@ -33,6 +34,7 @@ export class BaseGame {
     lobbycode: string | undefined;
     isTurn: boolean = false;
     isAdmin: boolean = false;
+    music?: HTMLAudioElement;
 
     constructor() {
         BaseGame.instance = this;

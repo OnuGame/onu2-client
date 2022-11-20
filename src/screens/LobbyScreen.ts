@@ -17,8 +17,30 @@ export class LobbyScreen extends OnuScreen {
         this.registerEvents();
     }
 
+    setActive(): void {
+        super.setActive();
+
+        if (this.baseGame.music) return;
+        this.baseGame.music = document.createElement("audio");
+        this.baseGame.music.src = "/assets/sounds/music.mp3";
+        this.baseGame.music.addEventListener("ended", () => {
+            this.baseGame.music?.play();
+        });
+        this.baseGame.music.play();
+    }
+
     registerEvents() {
         const connection = this.baseGame.connection;
+        const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
+        musicToggle.addEventListener("click", () => {
+            if (this.baseGame.music?.paused) {
+                this.baseGame.music.play();
+                musicToggle.src = "/assets/images/music_on.png";
+            } else {
+                this.baseGame.music?.pause();
+                musicToggle.src = "/assets/images/music_off.png";
+            }
+        });
 
         connection.registerEvent<UpdateAdminEvent>("UpdateAdminEvent", ({ uuid }) => {
             this.baseGame.isAdmin = this.baseGame.uuid === uuid;
