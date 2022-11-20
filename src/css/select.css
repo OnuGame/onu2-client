@@ -10,6 +10,14 @@ select {
     transition: background-color 0.2s;
 }
 
+select:disabled {
+    background: rgb(185, 108, 80);
+}
+
+select.dark:disabled {
+    background: #351414;
+}
+
 select.dark {
     background-color: #5c1a1a;
 }

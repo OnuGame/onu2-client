@@ -37,6 +37,10 @@ export class LobbyScreen extends OnuScreen {
 
                 startButton.innerText = "Start Game!";
                 lobbyMenu.appendChild(startButton);
+
+                document.querySelectorAll(".settings-element").forEach((elm) => {
+                    elm.setAttribute("disabled", "false");
+                });
             }
         });
 
@@ -74,6 +78,8 @@ export class LobbyScreen extends OnuScreen {
 
                 const select = document.createElement("select");
                 select.classList.add(this.baseGame.screenManager.darkmode ? "dark" : "light");
+                select.classList.add("settings-element");
+                select.setAttribute("disabled", "true");
 
                 for (let option of settings[key].defaults) {
                     const selectOption = document.createElement("option");
@@ -91,21 +97,6 @@ export class LobbyScreen extends OnuScreen {
 
                 settingsBox.appendChild(inputGroup);
             }
-
-            // settingsBox?.appendChild
-            /*
-         <div class="input-group">
-            // <label for="cardCountSelect">Card count:</label>
-            <select id="cardCountSelect">
-                <option value="5">5</option>
-                <option value="7">7</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-            </select>
-        </div>
-        <button id="startGameButton">Start Game!</button>;
-    */
         });
     }
 }
