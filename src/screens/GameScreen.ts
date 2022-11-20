@@ -6,6 +6,7 @@ import {
     CardRequestEvent,
     ColorWishEvent,
     GameOverEvent,
+    PlayerDoneEvent,
     PlayerTurnEvent,
     UpdateDeckEvent,
     UpdateDrawAmountEvent,
@@ -175,6 +176,17 @@ export class GameScreen extends OnuScreen {
             }
         );
 
+        connection.registerEvent<PlayerDoneEvent>("PlayerDoneEvent", ({ uuid }) => {
+            if (uuid === this.baseGame.uuid) {
+                let plingSound = document.createElement("audio");
+                plingSound.src = "/assets/sounds/won.wav";
+                plingSound.play();
+                plingSound.addEventListener("ended", () => {
+                    plingSound.remove();
+                });
+            }
+        });
+
         connection.registerEvent<CardRequestEvent>("CardRequestEvent", () => {
             // Drawing card was successful. Play card draw animation
 
@@ -264,12 +276,6 @@ export class GameScreen extends OnuScreen {
         });
 
         connection.registerEvent<GameOverEvent>("GameOverEvent", ({}) => {
-            let plingSound = document.createElement("audio");
-            plingSound.src = "/assets/sounds/won.wav";
-            plingSound.play();
-            plingSound.addEventListener("ended", () => {
-                plingSound.remove();
-            });
             this.baseGame.screenManager.setActiveScreen("lobbyScreen");
         });
     }
