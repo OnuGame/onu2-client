@@ -16,6 +16,11 @@ export class Connection extends EventSystem {
     }
 
     public connect() {
+        if (this.ws) {
+            DevMode.log("⌛", `Found existing connection. Closing old connection...`);
+            this.ws.close();
+        }
+
         DevMode.log("⌛", `Connecting to ${this.address}...`);
         return new Promise<void>((resolve, reject) => {
             this.ws = new WebSocket(this.address);
