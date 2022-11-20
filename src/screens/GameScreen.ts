@@ -213,12 +213,14 @@ export class GameScreen extends OnuScreen {
         connection.registerEvent<PlayerTurnEvent>("PlayerTurnEvent", ({ uuid }) => {
             this.baseGame.isTurn = uuid === this.baseGame.uuid;
 
-            let plingSound = document.createElement("audio");
-            plingSound.src = "/assets/sounds/pling.wav";
-            plingSound.play();
-            plingSound.addEventListener("ended", () => {
-                plingSound.remove();
-            });
+            if (this.baseGame.isTurn) {
+                let plingSound = document.createElement("audio");
+                plingSound.src = "/assets/sounds/pling.wav";
+                plingSound.play();
+                plingSound.addEventListener("ended", () => {
+                    plingSound.remove();
+                });
+            }
             this.renderCards();
         });
 
