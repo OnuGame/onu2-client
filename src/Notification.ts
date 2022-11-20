@@ -1,4 +1,5 @@
 import "./css/notification.css";
+import { BaseGame } from "./main";
 
 const notificationContainer = document.querySelector("#notifications")!;
 
@@ -6,8 +7,11 @@ export class Notification {
     constructor(public message: string, public duration: number) {}
 
     show() {
+        const dark = BaseGame.instance.screenManager.darkmode;
+
         const notification = document.createElement("div");
         notification.classList.add("notification");
+        notification.classList.add(dark ? "dark" : "light");
         notification.innerHTML = this.message;
         notificationContainer.appendChild(notification);
         setTimeout(() => {

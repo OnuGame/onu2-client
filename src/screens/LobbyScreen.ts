@@ -8,6 +8,7 @@ import { BaseGame } from "../main";
 import { OnuScreen } from "./OnuScreen";
 
 const lobbyPlayerlist = document.getElementById("lobbyPlayerlist") as HTMLOListElement;
+const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
 
 export class LobbyScreen extends OnuScreen {
     players: { username: string; uuid: string; cardCount: number }[];
@@ -26,19 +27,25 @@ export class LobbyScreen extends OnuScreen {
         this.baseGame.music.addEventListener("ended", () => {
             this.baseGame.music?.play();
         });
-        this.baseGame.music.play();
+
+        if (localStorage.getItem("music") === "true") {
+            this.baseGame.music.play();
+        } else {
+            musicToggle.src = "/assets/images/music_off.png";
+        }
     }
 
     registerEvents() {
         const connection = this.baseGame.connection;
-        const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
         musicToggle.addEventListener("click", () => {
             if (this.baseGame.music?.paused) {
                 this.baseGame.music.play();
                 musicToggle.src = "/assets/images/music_on.png";
+                localStorage.setItem("music", "true");
             } else {
                 this.baseGame.music?.pause();
                 musicToggle.src = "/assets/images/music_off.png";
+                localStorage.setItem("music", "false");
             }
         });
 
