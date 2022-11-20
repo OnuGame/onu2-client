@@ -39,7 +39,7 @@ export class LobbyScreen extends OnuScreen {
                 lobbyMenu.appendChild(startButton);
 
                 document.querySelectorAll(".settings-element").forEach((elm) => {
-                    elm.setAttribute("disabled", "false");
+                    elm.removeAttribute("disabled");
                 });
             }
         });
