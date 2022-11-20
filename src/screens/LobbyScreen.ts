@@ -37,10 +37,6 @@ export class LobbyScreen extends OnuScreen {
 
                 startButton.innerText = "Start Game!";
                 lobbyMenu.appendChild(startButton);
-
-                document.querySelectorAll(".settings-element").forEach((elm) => {
-                    elm.removeAttribute("disabled");
-                });
             }
         });
 
@@ -79,7 +75,7 @@ export class LobbyScreen extends OnuScreen {
                 const select = document.createElement("select");
                 select.classList.add(this.baseGame.screenManager.darkmode ? "dark" : "light");
                 select.classList.add("settings-element");
-                select.setAttribute("disabled", "true");
+                if (!this.baseGame.isAdmin) select.setAttribute("disabled", "true");
 
                 for (let option of settings[key].defaults) {
                     const selectOption = document.createElement("option");
