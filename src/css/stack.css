@@ -1,5 +1,5 @@
 :root {
-    --stackCardWidth: 12vw;
+    --stackCardWidth: min(12vw, 160px);
 }
 
 #stacks {

@@ -1,5 +1,5 @@
 :root {
-    --cardWidth: 10vw;
+    --cardWidth: min(10vw, 120px);
 }
 
 .card {
