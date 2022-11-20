@@ -10,6 +10,7 @@ import { OnuScreen } from "./OnuScreen";
 const lobbyPlayerlist = document.getElementById("lobbyPlayerlist") as HTMLOListElement;
 const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
 const themeToggle = document.querySelector("#themeToggle") as HTMLImageElement;
+const discordInvite = document.querySelector("#discordInvite") as HTMLAnchorElement;
 
 export class LobbyScreen extends OnuScreen {
     players: { username: string; uuid: string; cardCount: number }[];
@@ -62,6 +63,10 @@ export class LobbyScreen extends OnuScreen {
             } else {
                 themeToggle.src = "/assets/images/lightmode.png";
             }
+        });
+
+        discordInvite.addEventListener("click", () => {
+            window.open("https://discord.gg/NHgXTXNGfR", "_blank");
         });
 
         connection.registerEvent<UpdateAdminEvent>("UpdateAdminEvent", ({ uuid }) => {
