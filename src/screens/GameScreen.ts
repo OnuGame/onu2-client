@@ -41,11 +41,7 @@ function sortCards(cards: Card[]) {
         .filter((card) => card.color.color === "y")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const etcCards = cards
-        .filter((card) => {
-            console.log(card.color.color);
-
-            return card.color.color === null;
-        })
+        .filter((card) => card.color.color === null)
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
 
     return rCards
@@ -129,6 +125,8 @@ export class GameScreen extends OnuScreen {
         cardSvg.style.transform = rotation;
 
         cardSvg.setAttribute("options", JSON.stringify(options));
+
+        console.log("updateTopCard generator name:", generator.constructor.name);
         cardSvg.setAttribute("generator", cardGenerator || "");
 
         // replace the top card with the new one
@@ -337,6 +335,8 @@ export class GameScreen extends OnuScreen {
             cardSvg.classList.add("stackCard");
             cardSvg.setAttribute("id", card.id);
             cardSvg.setAttribute("options", JSON.stringify(options));
+
+            console.log("CardPlacedEvent generator name:", generator.constructor.name);
             cardSvg.setAttribute("generator", generator.constructor.name);
 
             cardSvg.style.transform = `rotate(${
