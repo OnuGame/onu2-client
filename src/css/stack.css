@@ -1,7 +1,3 @@
-:root {
-    --stackCardWidth: min(12vw, 160px);
-}
-
 #stacks {
     display: grid;
     grid-template-columns: repeat(2, min(var(--stackCardWidth), 40vw));

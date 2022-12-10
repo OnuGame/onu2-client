@@ -2,13 +2,14 @@ import { OnuScreen } from "./screens/OnuScreen";
 
 export class ScreenManager {
     activeScreen: OnuScreen;
-    darkmode: boolean;
+    theme: string;
 
     constructor(private screens: OnuScreen[]) {
         this.activeScreen = screens[0];
         this.activeScreen.setActive();
-        this.darkmode = localStorage.getItem("darkmode") == "true";
-        this.setDarkmode(this.darkmode);
+
+        this.theme = localStorage.getItem("theme") || "light";
+        this.setTheme(this.theme);
     }
 
     setActiveScreen(name: string) {
@@ -22,12 +23,13 @@ export class ScreenManager {
         this.activeScreen.setActive();
     }
 
-    setDarkmode(on: boolean) {
+    setTheme(theme: string) {
+        this.theme = theme;
         this.screens.forEach((screen) => {
-            screen.setDarkmode(on);
+            screen.setTheme(this.theme);
         });
-        this.darkmode = on;
-        localStorage.setItem("darkmode", on.toString());
+
+        localStorage.setItem("theme", this.theme);
     }
 
     setNextScreen() {

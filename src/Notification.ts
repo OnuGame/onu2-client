@@ -7,7 +7,7 @@ export class Notification {
     constructor(public message: string, public duration: number) {}
 
     show() {
-        const dark = BaseGame.instance.screenManager.darkmode;
+        const dark = BaseGame.instance.screenManager.theme;
 
         const notification = document.createElement("div");
         notification.classList.add("notification");

@@ -6,13 +6,9 @@
     transform: translateX(-50%);
     margin: 1vw;
     padding: 1.2vh;
-    background-color: coral;
+    background-color: var(--primary-color);
     border-radius: 10px;
     transition: top 0.25s ease-in-out;
-}
-
-.notification.dark {
-    background-color: #5c1a1a;
 }
 
 .notification.shown {

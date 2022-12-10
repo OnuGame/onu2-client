@@ -19,8 +19,8 @@
             }
         </style>
     </head>
-    <body class="light">
-        <img src="./assets/images/Onu.png" alt="OnuLogo" id="OnuLogo" class="light" />
+    <body class="themable">
+        <img src="./assets/images/Onu.png" alt="OnuLogo" id="OnuLogo" class="themable" />
         <div id="notifications"></div>
         <div id="startScreen" class="screen">
             <div class="menu">
@@ -30,7 +30,7 @@
                         type="text"
                         maxlength="20"
                         placeholder="Username"
-                        class="text-input light"
+                        class="text-input themable"
                         autocomplete="off"
                         id="usernameInput"
                     />
@@ -41,14 +41,14 @@
                         type="text"
                         maxlength="20"
                         placeholder="Lobby Code"
-                        class="text-input light"
+                        class="text-input themable"
                         autocomplete="off"
                         id="lobbycodeInput"
                     />
                 </div>
-                <button id="joinGameButton" class="light">Join/Create Game</button>
+                <button id="joinGameButton" class="themable">Join/Create Game</button>
             </div>
-            <select id="serverSelection" class="light">
+            <select id="serverSelection" class="themable">
                 <option value="-">Loading servers...</option>
             </select>
         </div>
@@ -68,7 +68,7 @@
                 <img
                     id="themeToggle"
                     class="clientSetting"
-                    src="/assets/images/lightmode.png"
+                    src="/assets/images/theme_light.png"
                     alt="Theme Toggle"
                 />
                 <img
@@ -101,15 +101,15 @@
         <div id="devToggle"></div>
 
         <div id="debugOutput">
-            <span class="devButton light">Serverlist:</span>
-            <select id="serverlistSelection" class="devButton light">
+            <span class="devButton themable">Serverlist:</span>
+            <select id="serverlistSelection" class="devButton themable">
                 <option value="public">public</option>
                 <option value="development">development</option>
             </select>
 
             <ul id="debugLog"></ul>
         </div>
-        <span id="versionNumber" class="light"></span>
+        <span id="versionNumber" class="themable"></span>
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>

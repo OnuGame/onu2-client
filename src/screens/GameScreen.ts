@@ -8,11 +8,17 @@ import {
     GameOverEvent,
     PlayerDoneEvent,
     PlayerTurnEvent,
+    UpdateColorEvent,
     UpdateDeckEvent,
     UpdateDrawAmountEvent,
     UpdatePlayerlistEvent,
 } from "@lebogo/onu2-shared";
+import { CardBackGenerator } from "../CardGenerators/CardBackGenerator";
+import { CardGenerator } from "../CardGenerators/CardGenerator";
+import { ColorCardGenerator } from "../CardGenerators/ColorCardGenerator";
+import { WishCardGenerator } from "../CardGenerators/WishCardGenerator";
 import { BaseGame } from "../main";
+import Themes from "../Themes";
 import { OnuScreen } from "./OnuScreen";
 
 function sortCards(cards: Card[]) {
@@ -23,7 +29,7 @@ function sortCards(cards: Card[]) {
         .filter((card) => card.color.color === "g")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const tCards = cards
-        .filter((card) => card.color.color === "t")
+        .filter((card) => card.color.color === "c")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const bCards = cards
         .filter((card) => card.color.color === "b")
@@ -35,7 +41,7 @@ function sortCards(cards: Card[]) {
         .filter((card) => card.color.color === "y")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const etcCards = cards
-        .filter((card) => card.color.color === "c")
+        .filter((card) => card.color.color === "")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
 
     return rCards
@@ -48,10 +54,19 @@ function sortCards(cards: Card[]) {
 }
 
 export class GameScreen extends OnuScreen {
+    private wishCardGenerator: WishCardGenerator;
+    private cardBackGenerator: CardBackGenerator;
+    private colorCardGenerator: ColorCardGenerator;
+
     private maxAngle = 20;
     constructor(private baseGame: BaseGame) {
         super("gameScreen");
-        this.registerEvents();
+
+        this.wishCardGenerator = new WishCardGenerator(Themes[this.theme]);
+        this.cardBackGenerator = new CardBackGenerator(Themes[this.theme]);
+        this.colorCardGenerator = new ColorCardGenerator(Themes[this.theme]);
+
+        this.initialize();
     }
 
     setActive(): void {
@@ -59,25 +74,61 @@ export class GameScreen extends OnuScreen {
         this.populateDrawstack();
     }
 
+    setTheme(theme: string) {
+        super.setTheme(theme);
+        this.wishCardGenerator.setTheme(Themes[this.theme]);
+        this.cardBackGenerator.setTheme(Themes[this.theme]);
+        this.colorCardGenerator.setTheme(Themes[this.theme]);
+    }
+
     populateDrawstack() {
         const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
 
         drawStack.innerHTML = "";
+        const cardBack = this.cardBackGenerator.generate();
 
         // create 40 cards for drawstack
         for (let i = 0; i < 40; i++) {
-            const cardImage = document.createElement("img");
-            cardImage.src = `/assets/cards/cardback.png`;
-            cardImage.classList.add("card");
-            cardImage.classList.add("stackCard");
-            cardImage.classList.add(this.theme);
-            cardImage.style.transform = `rotate(${
+            let cardBackCopy = cardBack.cloneNode(true) as HTMLElement;
+            cardBackCopy.classList.add("card");
+            cardBackCopy.classList.add("stackCard");
+            cardBackCopy.style.transform = `rotate(${
                 Math.random() * this.maxAngle - this.maxAngle / 2
             }deg)`;
-            drawStack.appendChild(cardImage);
+            drawStack.appendChild(cardBackCopy);
         }
 
         drawStack.onclick = this.drawClicked.bind(this);
+    }
+
+    updateTopCard(newOptions: { [key: string]: any }) {
+        const stack = document.querySelector("#stack") as HTMLDivElement;
+        const topCardElement = stack.children[stack.childElementCount - 1] as HTMLElement;
+
+        // get rotation of top card
+        const rotation = topCardElement.style.transform;
+        let options = { ...JSON.parse(topCardElement.getAttribute("options")!), ...newOptions };
+
+        // get card generator from card attributes
+        let cardGenerator = topCardElement.getAttribute("generator");
+        let generator: CardGenerator | null = null;
+        if (cardGenerator === "ColorCardGenerator") {
+            generator = this.colorCardGenerator;
+        } else if (cardGenerator === "WishCardGenerator") {
+            generator = this.wishCardGenerator;
+        }
+
+        if (!generator) return;
+
+        const cardSvg = generator.generate(options);
+        cardSvg.classList.add("stackCard");
+        cardSvg.style.transform = rotation;
+
+        cardSvg.setAttribute("options", JSON.stringify(options));
+        cardSvg.setAttribute("generator", cardGenerator || "");
+
+        // replace the top card with the new one
+        topCardElement.replaceWith(cardSvg);
     }
 
     drawClicked() {
@@ -99,28 +150,40 @@ export class GameScreen extends OnuScreen {
 
         // create card imgs for each card in deck
         for (const card of this.baseGame.deck) {
-            const cardImage = document.createElement("img");
-            cardImage.src = `/assets/cards/${card.type}.png`;
-            cardImage.classList.add("card");
-            cardImage.classList.add("hoverable");
-            cardImage.classList.add(this.theme);
-            cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
+            let generator: CardGenerator = this.colorCardGenerator;
+
+            if (["p2", "p4", "w"].includes(card.type)) generator = this.wishCardGenerator;
+            let drawAmount = card.type.startsWith("p") ? parseInt(card.type.replace("p", "")) : 0;
+            let options = {
+                drawAmount,
+                type: card.type,
+                color: card.color.color,
+            };
+
+            const cardSvg = generator.generate(options);
+            cardSvg.classList.add("hoverable");
+            cardSvg.setAttribute("id", card.id);
+            cardSvg.setAttribute("generator", generator.constructor.name);
 
             const isCompatible = this.baseGame.topCard?.compare(card);
             const isPlayersTurn = this.baseGame.isTurn;
             const drawCard = this.baseGame.drawAmount > 1 && ["p2", "p4"].includes(card.type);
             if (isCompatible && isPlayersTurn && (drawCard || this.baseGame.drawAmount === 1)) {
-                cardImage.onclick = this.cardClicked.bind(this, card);
+                cardSvg.onclick = this.cardClicked.bind(this, card);
             } else {
-                cardImage.classList.add("disabled");
+                cardSvg.classList.add("disabled");
             }
 
-            deckElement.appendChild(cardImage);
+            deckElement.appendChild(cardSvg);
         }
     }
 
-    registerEvents() {
+    async initialize() {
         const connection = this.baseGame.connection;
+
+        await this.cardBackGenerator.load();
+        await this.colorCardGenerator.load();
+        await this.wishCardGenerator.load();
 
         connection.registerEvent<UpdatePlayerlistEvent>(
             "UpdatePlayerlistEvent",
@@ -163,16 +226,15 @@ export class GameScreen extends OnuScreen {
             });
 
             this.baseGame.deck = deck;
-            this.renderCards();
         });
 
         connection.registerEvent<UpdateDrawAmountEvent>(
             "UpdateDrawAmountEvent",
             ({ drawAmount }) => {
                 this.baseGame.drawAmount = drawAmount;
-                let displayAmount = drawAmount.toString();
-                if (drawAmount === 1) displayAmount = ""; // if draw amount is 1, dont show it
-                document.querySelector("#drawAmount")!.innerHTML = displayAmount;
+                if (drawAmount == 1) drawAmount = 0;
+
+                this.updateTopCard({ drawAmount });
             }
         );
 
@@ -188,8 +250,6 @@ export class GameScreen extends OnuScreen {
         });
 
         connection.registerEvent<CardRequestEvent>("CardRequestEvent", () => {
-            // Drawing card was successful. Play card draw animation
-
             // get the last child of drawstack that does not have the drawTurn class applied
             const drawStack = document.querySelector("#drawstack") as HTMLDivElement;
             const drawStackChildren = drawStack.children;
@@ -236,6 +296,12 @@ export class GameScreen extends OnuScreen {
             this.renderCards();
         });
 
+        connection.registerEvent<UpdateColorEvent>("UpdateColorEvent", ({ color }) => {
+            this.baseGame.topCard!.color.color = color.color;
+
+            this.updateTopCard({ color: color.color });
+        });
+
         connection.registerEvent<CardPlacedEvent>("CardPlacedEvent", ({ card }) => {
             // convert card to a real card object with a color object instead of a normal object
             card.color = new CardColor(card.color.color);
@@ -246,20 +312,34 @@ export class GameScreen extends OnuScreen {
             this.baseGame.topCard = tempCard;
 
             // add the card to the stack
-            const stackElement = document.getElementById("stack") as HTMLDivElement;
-            const cardImage = document.createElement("img");
-            cardImage.src = `/assets/cards/${card.type}.png`;
-            cardImage.classList.add("card");
-            cardImage.classList.add("stackCard");
-            cardImage.classList.add(this.theme);
-            cardImage.style.backgroundImage = `url(/assets/cards/${card.color.color}.png)`;
-            // apply random rotation to card
-            cardImage.style.transform = `rotate(${
+            const stackElement = document.getElementById("stack")!;
+
+            let generator: CardGenerator = this.colorCardGenerator;
+
+            if (["p2", "p4", "w"].includes(card.type)) generator = this.wishCardGenerator;
+
+            let drawAmount = card.type.startsWith("p")
+                ? (this.baseGame.drawAmount == 1 ? 0 : this.baseGame.drawAmount) +
+                  parseInt(card.type.replace("p", ""))
+                : 0;
+
+            let options = {
+                drawAmount,
+                type: card.type,
+                color: card.color.color,
+            };
+
+            const cardSvg = generator.generate(options);
+            cardSvg.classList.add("stackCard");
+            cardSvg.setAttribute("id", card.id);
+            cardSvg.setAttribute("options", JSON.stringify(options));
+            cardSvg.setAttribute("generator", generator.constructor.name);
+
+            cardSvg.style.transform = `rotate(${
                 Math.random() * this.maxAngle - this.maxAngle / 2
             }deg)`;
 
-            cardImage.setAttribute("id", card.id);
-            stackElement.appendChild(cardImage);
+            stackElement.appendChild(cardSvg);
 
             // remove old cards from stack (only keep the last 10)
             const stackChildren = stackElement.children;

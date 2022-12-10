@@ -18,6 +18,7 @@ import "./css/playerlist.css";
 import "./css/screen.css";
 import "./css/select.css";
 import "./css/stack.css";
+import "./css/textinput.css";
 import { DevMode } from "./DevMode";
 
 const PORT = 3000;

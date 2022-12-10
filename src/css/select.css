@@ -5,27 +5,11 @@ select {
     width: 100%;
     font-size: 2em;
     border: none;
-    background: coral;
+    background: var(--primary-color);
     border-radius: 1vw;
-    transition: background-color 0.2s;
+    transition: filter 0.2s;
 }
 
 select:disabled {
-    background: rgb(185, 108, 80);
-}
-
-select.dark:disabled {
-    background: #351414;
-}
-
-select.dark {
-    background-color: #5c1a1a;
-}
-
-select.dark:hover {
-    background-color: #722222;
-}
-
-select.dark:active {
-    background-color: #3e1111;
+    filter: brightness(0.5) saturate(0.5);
 }

@@ -1,3 +1,10 @@
+:root {
+    --stackCardWidth: 160px;
+    --cardWidth: 120px;
+    --primary-color: #7650ff;
+    --input-color: #ff000033;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,9 +18,6 @@
     top: 2vh;
     left: 2vw;
     width: min(12vw, 20vh);
-}
-#OnuLogo.dark {
-    filter: brightness(0.9) saturate(0.9);
 }
 
 @keyframes scrolling {
@@ -34,10 +38,6 @@ body {
     transition: background-color 0.2s;
 }
 
-body.dark {
-    background-color: #111;
-}
-
 .input-group {
     margin-top: 2vh;
 }
@@ -53,41 +53,6 @@ label {
     display: block;
     font-size: 2em !important;
     padding-bottom: 0.5vh;
-}
-
-.text-input {
-    display: block;
-    outline: none;
-    padding: 2vh;
-    font-size: 2em;
-    border: none;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 1vw;
-}
-
-@keyframes wiggle {
-    0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(2deg);
-    }
-
-    75% {
-        transform: rotate(-2deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
-
-.text-input.invalid {
-    animation: wiggle 0.25s ease-in-out;
-    /* wait 5 seconds between animations */
-}
-
-.text-input.dark {
-    background: rgba(204, 41, 41, 0.2);
 }
 
 #serverSelection {
@@ -151,10 +116,6 @@ label {
     font-size: 0.8em;
     padding: 0.4vh;
     color: #111;
-}
-
-#versionNumber.dark {
-    color: #ddd;
 }
 
 a {

@@ -35,9 +35,15 @@ export class LobbyScreen extends OnuScreen {
         } else {
             musicToggle.src = "/assets/images/music_off.png";
         }
+    }
 
-        if (localStorage.getItem("darkmode") === "true") {
-            themeToggle.src = "/assets/images/darkmode.png";
+    setTheme(theme: string): void {
+        super.setTheme(theme);
+
+        if (theme === "dark") {
+            themeToggle.src = "/assets/images/theme_dark.png";
+        } else {
+            themeToggle.src = "/assets/images/theme_light.png";
         }
     }
 
@@ -56,12 +62,12 @@ export class LobbyScreen extends OnuScreen {
         });
 
         themeToggle.addEventListener("click", () => {
-            this.baseGame.screenManager.setDarkmode(!this.baseGame.screenManager.darkmode);
-            localStorage.setItem("darkmode", this.baseGame.screenManager.darkmode.toString());
-            if (this.baseGame.screenManager.darkmode) {
-                themeToggle.src = "/assets/images/darkmode.png";
+            if (this.theme == "dark") {
+                this.baseGame.screenManager.setTheme("light");
+                themeToggle.src = "/assets/images/theme_light.png";
             } else {
-                themeToggle.src = "/assets/images/lightmode.png";
+                this.baseGame.screenManager.setTheme("dark");
+                themeToggle.src = "/assets/images/theme_dark.png";
             }
         });
 
@@ -78,7 +84,7 @@ export class LobbyScreen extends OnuScreen {
 
                 const startButton = document.createElement("button");
                 startButton.id = "startGameButton";
-                startButton.classList.add(this.baseGame.screenManager.darkmode ? "dark" : "light");
+                startButton.classList.add(this.theme);
 
                 startButton.addEventListener("click", () => {
                     connection.send(new GameStartEvent());
@@ -113,7 +119,6 @@ export class LobbyScreen extends OnuScreen {
         });
 
         connection.registerEvent<SettingsChangedEvent>("SettingsChangedEvent", ({ settings }) => {
-            console.log(settings);
             const settingsBox = document.querySelector("#gameSettings")!;
             settingsBox.innerHTML = "";
 
@@ -126,7 +131,7 @@ export class LobbyScreen extends OnuScreen {
                 inputGroup.appendChild(label);
 
                 const select = document.createElement("select");
-                select.classList.add(this.baseGame.screenManager.darkmode ? "dark" : "light");
+                select.classList.add(this.theme);
                 select.classList.add("settings-element");
                 if (!this.baseGame.isAdmin) select.setAttribute("disabled", "true");
 

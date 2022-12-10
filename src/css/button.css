@@ -7,27 +7,15 @@ button {
     border: none;
     margin-top: 2vh;
     margin-bottom: 1vh;
-    background: coral;
+    background: var(--primary-color);
     border-radius: 1vw;
-    transition: background-color 0.2s;
+    transition: filter 0.2s;
 }
 
 button:hover {
-    background: rgb(255, 140, 98);
+    filter: brightness(1.1);
 }
 
 button:active {
-    background: rgb(214, 115, 79);
-}
-
-button.dark {
-    background-color: #5c1a1a;
-}
-
-button.dark:hover {
-    background-color: #722222;
-}
-
-button.dark:active {
-    background-color: #3e1111;
+    filter: brightness(0.85);
 }
