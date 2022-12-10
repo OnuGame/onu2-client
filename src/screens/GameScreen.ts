@@ -41,7 +41,11 @@ function sortCards(cards: Card[]) {
         .filter((card) => card.color.color === "y")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const etcCards = cards
-        .filter((card) => card.color.color === "")
+        .filter((card) => {
+            console.log(card.color.color);
+
+            return card.color.color === null;
+        })
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
 
     return rCards
