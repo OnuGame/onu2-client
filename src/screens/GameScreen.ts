@@ -112,9 +112,9 @@ export class GameScreen extends OnuScreen {
         // get card generator from card attributes
         let cardGenerator = topCardElement.getAttribute("generator");
         let generator: CardGenerator | null = null;
-        if (cardGenerator === "ColorCardGenerator") {
+        if (cardGenerator === this.colorCardGenerator.constructor.name) {
             generator = this.colorCardGenerator;
-        } else if (cardGenerator === "WishCardGenerator") {
+        } else if (cardGenerator === this.wishCardGenerator.constructor.name) {
             generator = this.wishCardGenerator;
         }
 
@@ -126,7 +126,6 @@ export class GameScreen extends OnuScreen {
 
         cardSvg.setAttribute("options", JSON.stringify(options));
 
-        console.log("updateTopCard generator name:", generator.constructor.name);
         cardSvg.setAttribute("generator", cardGenerator || "");
 
         // replace the top card with the new one
@@ -336,7 +335,6 @@ export class GameScreen extends OnuScreen {
             cardSvg.setAttribute("id", card.id);
             cardSvg.setAttribute("options", JSON.stringify(options));
 
-            console.log("CardPlacedEvent generator name:", generator.constructor.name);
             cardSvg.setAttribute("generator", generator.constructor.name);
 
             cardSvg.style.transform = `rotate(${
