@@ -227,6 +227,8 @@ export class GameScreen extends OnuScreen {
             });
 
             this.baseGame.deck = deck;
+
+            this.renderCards();
         });
 
         connection.registerEvent<UpdateDrawAmountEvent>(
@@ -294,6 +296,7 @@ export class GameScreen extends OnuScreen {
                     plingSound.remove();
                 });
             }
+
             this.renderCards();
         });
 
