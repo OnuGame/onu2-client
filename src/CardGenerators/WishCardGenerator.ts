@@ -1,4 +1,4 @@
-import { CardThemeName, OnuCardColor, OnuTheme } from "../OnuTheme";
+import { OnuCardColor, OnuTheme } from "../OnuTheme";
 import { CardGenerator } from "./CardGenerator";
 
 export class WishCardGenerator extends CardGenerator {
@@ -6,11 +6,10 @@ export class WishCardGenerator extends CardGenerator {
         super("./assets/cards/WishCard.svg", theme);
     }
 
-    // { cardAmount: 13, color: "red" }
     generate(options: {
         drawAmount?: number;
         color?: OnuCardColor;
-        theme: CardThemeName;
+        isRandomColor?: boolean;
     }): HTMLElement {
         const card = super.generate(options);
 
@@ -30,31 +29,59 @@ export class WishCardGenerator extends CardGenerator {
         whiteOutline!.setAttribute("fill", this.theme.cards.background);
 
         const red = card.querySelector("#red");
-        red!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.r);
-
         const green = card.querySelector("#green");
-        green!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.g);
-
         const blue = card.querySelector("#blue");
-        blue!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.b);
-
         const yellow = card.querySelector("#yellow");
+
+        red!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.r);
+        green!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.g);
+        blue!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.b);
         yellow!.setAttribute("fill", this.theme.cards[options.color!] || this.theme.cards.y);
 
-        const upperPlus = card.querySelector("#upper_plus");
-        upperPlus!.setAttribute("fill", this.theme.cards.background);
-        if (!options.drawAmount) upperPlus!.remove();
+        const upperRandom = card.querySelector("#urd");
+        const lowerRandom = card.querySelector("#lrd");
+        if (!options.isRandomColor) {
+            upperRandom!.remove();
+            lowerRandom!.remove();
+        } else {
+            upperRandom!.querySelectorAll("*").forEach((elm) => {
+                if (elm.id.includes("question"))
+                    elm.setAttribute("fill", this.theme.cards.background);
+                if (elm.id.includes("outline")) elm.setAttribute("fill", this.theme.cards.main);
+                if (elm.id.includes("red")) elm.setAttribute("fill", this.theme.cards.r);
+                if (elm.id.includes("green")) elm.setAttribute("fill", this.theme.cards.g);
+                if (elm.id.includes("blue")) elm.setAttribute("fill", this.theme.cards.b);
+                // if (elm.id.includes("yellow")) elm.setAttribute("fill", this.theme.cards.y); // there are no yellow dots in the random color svg
 
+                if (elm.id.includes("cube")) elm.setAttribute("fill", this.theme.cards.background);
+            });
+            lowerRandom!.querySelectorAll("*").forEach((elm) => {
+                if (elm.id.includes("question"))
+                    elm.setAttribute("fill", this.theme.cards.background);
+                if (elm.id.includes("outline")) elm.setAttribute("fill", this.theme.cards.main);
+                if (elm.id.includes("red")) elm.setAttribute("fill", this.theme.cards.r);
+                if (elm.id.includes("green")) elm.setAttribute("fill", this.theme.cards.g);
+                if (elm.id.includes("blue")) elm.setAttribute("fill", this.theme.cards.b);
+                // if (elm.id.includes("yellow")) elm.setAttribute("fill", this.theme.cards.y); // there are no yellow dots in the random color svg
+
+                if (elm.id.includes("cube")) elm.setAttribute("fill", this.theme.cards.background);
+            });
+        }
+
+        const upperPlus = card.querySelector("#upper_plus");
         const lowerPlus = card.querySelector("#lower_plus");
+
+        upperPlus!.setAttribute("fill", this.theme.cards.background);
         lowerPlus!.setAttribute("fill", this.theme.cards.background);
+        if (!options.drawAmount) upperPlus!.remove();
         if (!options.drawAmount) lowerPlus!.remove();
 
         const upperNumbers = card.querySelectorAll("#small_numbers > #upper *");
+        const lowerNumbers = card.querySelectorAll("#small_numbers > #lower *");
         upperNumbers.forEach((upperNumber) => {
             upperNumber.setAttribute("fill", this.theme.cards.background);
             upperNumber.setAttribute("style", "display: none");
         });
-        const lowerNumbers = card.querySelectorAll("#small_numbers > #lower *");
         lowerNumbers.forEach((lowerNumber) => {
             lowerNumber.setAttribute("fill", this.theme.cards.background);
             lowerNumber.setAttribute("style", "display: none");

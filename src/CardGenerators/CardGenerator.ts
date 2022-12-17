@@ -19,7 +19,7 @@ export class CardGenerator {
     }
 
     generate(options?: { [key: string]: any }): HTMLElement {
-        options;
+        console.log(options);
         const card = this.baseCard.cloneNode(true) as HTMLElement;
         card.querySelectorAll("*").forEach((element) => element.setAttribute("class", ""));
 

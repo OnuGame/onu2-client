@@ -21,6 +21,8 @@ import { BaseGame } from "../main";
 import Themes from "../Themes";
 import { OnuScreen } from "./OnuScreen";
 
+const WISHCARDS = ["p2", "p4", "w", "rc"];
+
 function sortCards(cards: Card[]) {
     const rCards = cards
         .filter((card) => card.color.color === "r")
@@ -153,12 +155,13 @@ export class GameScreen extends OnuScreen {
         for (const card of this.baseGame.deck) {
             let generator: CardGenerator = this.colorCardGenerator;
 
-            if (["p2", "p4", "w"].includes(card.type)) generator = this.wishCardGenerator;
+            if (WISHCARDS.includes(card.type)) generator = this.wishCardGenerator;
             let drawAmount = card.type.startsWith("p") ? parseInt(card.type.replace("p", "")) : 0;
             let options = {
                 drawAmount,
                 type: card.type,
                 color: card.color.color,
+                isRandomColor: card.type == "rc",
             };
 
             const cardSvg = generator.generate(options);
@@ -320,7 +323,7 @@ export class GameScreen extends OnuScreen {
 
             let generator: CardGenerator = this.colorCardGenerator;
 
-            if (["p2", "p4", "w"].includes(card.type)) generator = this.wishCardGenerator;
+            if (WISHCARDS.includes(card.type)) generator = this.wishCardGenerator;
 
             let drawAmount = card.type.startsWith("p")
                 ? (this.baseGame.drawAmount == 1 ? 0 : this.baseGame.drawAmount) +
@@ -331,6 +334,7 @@ export class GameScreen extends OnuScreen {
                 drawAmount,
                 type: card.type,
                 color: card.color.color,
+                isRandomColor: card.type == "rc",
             };
 
             const cardSvg = generator.generate(options);
