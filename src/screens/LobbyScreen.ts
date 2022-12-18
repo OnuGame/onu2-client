@@ -5,6 +5,7 @@ import {
     UpdatePlayerlistEvent,
 } from "@lebogo/onu2-shared";
 import { BaseGame } from "../main";
+import { Notification } from "../Notification";
 import { OnuScreen } from "./OnuScreen";
 
 const lobbyPlayerlist = document.getElementById("lobbyPlayerlist") as HTMLOListElement;
@@ -17,7 +18,7 @@ export class LobbyScreen extends OnuScreen {
     constructor(private baseGame: BaseGame) {
         super("lobbyScreen");
         this.players = [];
-        this.registerEvents();
+        this.initialize();
     }
 
     setActive(): void {
@@ -47,7 +48,7 @@ export class LobbyScreen extends OnuScreen {
         }
     }
 
-    registerEvents() {
+    async initialize() {
         const connection = this.baseGame.connection;
         musicToggle.addEventListener("click", () => {
             if (this.baseGame.music?.paused) {
@@ -131,7 +132,6 @@ export class LobbyScreen extends OnuScreen {
                 inputGroup.appendChild(label);
 
                 const select = document.createElement("select");
-                select.classList.add(this.theme);
                 select.classList.add("settings-element");
                 if (!this.baseGame.isAdmin) select.setAttribute("disabled", "true");
 
@@ -151,6 +151,19 @@ export class LobbyScreen extends OnuScreen {
 
                 settingsBox.appendChild(inputGroup);
             }
+
+            // create a button to copy the lobby code + link to the clipboard
+            const copyButton = document.createElement("button");
+            copyButton.classList.add("settings-element");
+            copyButton.innerText = "Copy Lobby Code";
+            copyButton.addEventListener("click", () => {
+                navigator.clipboard.writeText(
+                    `${window.location.origin}/#${this.baseGame.lobbycode}`
+                );
+                new Notification("Copied lobby code to clipboard!", 2000).show();
+            });
+
+            settingsBox.appendChild(copyButton);
         });
     }
 }

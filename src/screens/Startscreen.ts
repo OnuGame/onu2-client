@@ -11,7 +11,7 @@ const lobbycodeInput = document.getElementById("lobbycodeInput") as HTMLInputEle
 export class Startscreen extends OnuScreen {
     constructor(private baseGame: BaseGame) {
         super("startScreen");
-        this.registerEvents();
+        this.initialize();
 
         // add updateServerlist to the window object so it can be called from the console
         (window as any).updateServerlist = this.updateServerlist;
@@ -71,7 +71,7 @@ export class Startscreen extends OnuScreen {
         });
     }
 
-    registerEvents() {
+    async initialize() {
         const connection = this.baseGame.connection;
 
         usernameInput.addEventListener("keyup", (event) => {
@@ -85,6 +85,16 @@ export class Startscreen extends OnuScreen {
                 joinGameButton.click();
             }
         });
+
+        if (location.hash) {
+            const lobbyCode = location.hash.replace("#", "");
+            lobbycodeInput.value = lobbyCode;
+            history.replaceState(
+                "",
+                document.title,
+                window.location.pathname + window.location.search
+            );
+        }
 
         joinGameButton.addEventListener("click", async () => {
             this.baseGame.username = usernameInput.value;
