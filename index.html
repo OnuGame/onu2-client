@@ -19,8 +19,8 @@
             }
         </style>
     </head>
-    <body class="themable">
-        <img src="./assets/images/Onu.png" alt="OnuLogo" id="OnuLogo" class="themable" />
+    <body>
+        <img src="./assets/images/Onu.png" alt="OnuLogo" id="OnuLogo" />
         <div id="notifications"></div>
         <div id="startScreen" class="screen">
             <div class="menu">
@@ -30,7 +30,7 @@
                         type="text"
                         maxlength="20"
                         placeholder="Username"
-                        class="text-input themable"
+                        class="text-input"
                         autocomplete="off"
                         id="usernameInput"
                     />
@@ -41,14 +41,14 @@
                         type="text"
                         maxlength="20"
                         placeholder="Lobby Code"
-                        class="text-input themable"
+                        class="text-input"
                         autocomplete="off"
                         id="lobbycodeInput"
                     />
                 </div>
-                <button id="joinGameButton" class="themable">Join/Create Game</button>
+                <button id="joinGameButton">Join/Create Game</button>
             </div>
-            <select id="serverSelection" class="themable">
+            <select id="serverSelection">
                 <option value="-">Loading servers...</option>
             </select>
         </div>
@@ -101,15 +101,15 @@
         <div id="devToggle"></div>
 
         <div id="debugOutput">
-            <span class="devButton themable">Serverlist:</span>
-            <select id="serverlistSelection" class="devButton themable">
+            <span class="devButton">Serverlist:</span>
+            <select id="serverlistSelection" class="devButton">
                 <option value="public">public</option>
                 <option value="development">development</option>
             </select>
 
             <ul id="debugLog"></ul>
         </div>
-        <span id="versionNumber" class="themable"></span>
+        <span id="versionNumber"></span>
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>
