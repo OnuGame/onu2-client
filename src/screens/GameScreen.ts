@@ -217,6 +217,8 @@ export class GameScreen extends OnuScreen {
 
                     playerList.appendChild(playerListEntry);
                 });
+
+                this.renderCards();
             }
         );
 
