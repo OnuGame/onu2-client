@@ -16,8 +16,8 @@
         "vite": "^3.0.7"
     },
     "dependencies": {
-        "@lebogo/eventsystem": "github:OnuGame/eventsystem",
-        "@lebogo/onu2-shared": "github:OnuGame/onu2-shared"
+        "@lebogo/eventsystem": "file:../eventsystem",
+        "@lebogo/onu2-shared": "file:../onu2-shared"
     },
     "description": "A Web based client to connect to an official Onu2 server.",
     "main": "index.js",
