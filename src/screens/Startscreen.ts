@@ -42,7 +42,7 @@ export class Startscreen extends OnuScreen {
             this.baseGame.username = usernameInput.value;
             this.baseGame.lobbycode = lobbycodeInput.value;
 
-            if (this.baseGame.username == "") {
+            if (this.baseGame.username.trim() == "") {
                 usernameInput.classList.add("invalid");
                 new Notification("Please enter a username", 2000).show();
                 setTimeout(() => {
@@ -51,7 +51,7 @@ export class Startscreen extends OnuScreen {
                 return;
             }
 
-            if (this.baseGame.lobbycode == "") {
+            if (this.baseGame.lobbycode.trim() == "") {
                 lobbycodeInput.classList.add("invalid");
                 new Notification("Please enter a lobby code", 2000).show();
                 setTimeout(() => {
