@@ -30,7 +30,7 @@ export class Startscreen extends OnuScreen {
 
         if (location.hash) {
             const lobbyCode = location.hash.replace("#", "");
-            lobbycodeInput.value = lobbyCode;
+            lobbycodeInput.value = decodeURI(lobbyCode);
             history.replaceState(
                 "",
                 document.title,

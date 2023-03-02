@@ -158,7 +158,7 @@ export class LobbyScreen extends OnuScreen {
             copyButton.innerText = "Copy Lobby Code";
             copyButton.addEventListener("click", () => {
                 navigator.clipboard.writeText(
-                    `${window.location.origin}/#${this.baseGame.lobbycode}`
+                    `${window.location.origin}/#${encodeURI(this.baseGame.lobbycode!)}`
                 );
                 new Notification("Copied lobby code to clipboard!", 2000).show();
             });
