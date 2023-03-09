@@ -10,6 +10,7 @@ import { OnuScreen } from "./OnuScreen";
 
 const lobbyPlayerlist = document.getElementById("lobbyPlayerlist") as HTMLOListElement;
 const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
+const soundToggle = document.querySelector("#soundToggle") as HTMLImageElement;
 const themeToggle = document.querySelector("#themeToggle") as HTMLImageElement;
 const discordInvite = document.querySelector("#discordInvite") as HTMLAnchorElement;
 
@@ -36,6 +37,12 @@ export class LobbyScreen extends OnuScreen {
         } else {
             musicToggle.src = "/assets/images/music_off.png";
         }
+
+        if (localStorage.getItem("sounds") === "true") {
+            this.baseGame.sounds = true;
+        } else {
+            soundToggle.src = "/assets/images/sound_off.png";
+        }
     }
 
     setTheme(theme: string): void {
@@ -59,6 +66,18 @@ export class LobbyScreen extends OnuScreen {
                 this.baseGame.music?.pause();
                 musicToggle.src = "/assets/images/music_off.png";
                 localStorage.setItem("music", "false");
+            }
+        });
+
+        soundToggle.addEventListener("click", () => {
+            if (!this.baseGame.sounds) {
+                this.baseGame.sounds = true;
+                soundToggle.src = "/assets/images/sound_on.png";
+                localStorage.setItem("sounds", "true");
+            } else {
+                this.baseGame.sounds = false;
+                soundToggle.src = "/assets/images/sound_off.png";
+                localStorage.setItem("sounds", "false");
             }
         });
 

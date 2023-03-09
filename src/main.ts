@@ -36,6 +36,7 @@ export class BaseGame {
     isTurn: boolean = false;
     isAdmin: boolean = false;
     music?: HTMLAudioElement;
+    sounds = false;
 
     constructor() {
         BaseGame.instance = this;

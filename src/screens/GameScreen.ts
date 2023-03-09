@@ -247,7 +247,7 @@ export class GameScreen extends OnuScreen {
         );
 
         connection.registerEvent<PlayerDoneEvent>("PlayerDoneEvent", ({ uuid }) => {
-            if (uuid === this.baseGame.uuid) {
+            if (uuid === this.baseGame.uuid && this.baseGame.sounds) {
                 let plingSound = document.createElement("audio");
                 plingSound.src = "/assets/sounds/won.wav";
                 plingSound.play();
@@ -293,7 +293,7 @@ export class GameScreen extends OnuScreen {
         connection.registerEvent<PlayerTurnEvent>("PlayerTurnEvent", ({ uuid }) => {
             this.baseGame.isTurn = uuid === this.baseGame.uuid;
 
-            if (this.baseGame.isTurn) {
+            if (this.baseGame.isTurn && this.baseGame.sounds) {
                 let plingSound = document.createElement("audio");
                 plingSound.src = "/assets/sounds/pling.wav";
                 plingSound.play();
