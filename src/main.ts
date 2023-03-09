@@ -3,10 +3,12 @@ import { Card, ReconnectedEvent, ReconnectEvent } from "@lebogo/onu2-shared";
 import * as config from "../package.json";
 
 import { Connection } from "./Connection";
+import { DevMode } from "./DevMode";
 import { ScreenManager } from "./ScreenManager";
 import { GameScreen } from "./screens/GameScreen";
 import { LobbyScreen } from "./screens/LobbyScreen";
 import { Startscreen } from "./screens/Startscreen";
+import { SoundManager } from "./SoundManager";
 
 import "./css/button.css";
 import "./css/card.css";
@@ -19,13 +21,13 @@ import "./css/screen.css";
 import "./css/select.css";
 import "./css/stack.css";
 import "./css/textinput.css";
-import { DevMode } from "./DevMode";
 
 const PORT = 3000;
 
 export class BaseGame {
     public static instance: BaseGame;
     screenManager: ScreenManager;
+    soundManager: SoundManager;
     connection: Connection;
     uuid: string | undefined;
     drawAmount: number = 1;
@@ -35,11 +37,10 @@ export class BaseGame {
     lobbycode: string | undefined;
     isTurn: boolean = false;
     isAdmin: boolean = false;
-    music?: HTMLAudioElement;
-    sounds = false;
 
     constructor() {
         BaseGame.instance = this;
+        this.soundManager = new SoundManager();
         this.connection = new Connection(`ws://${location.hostname}:${PORT}`);
         this.connection.registerEvent<ReconnectedEvent>("ReconnectedEvent", () => {
             if (this.lobbycode && this.uuid) {

@@ -25,24 +25,14 @@ export class LobbyScreen extends OnuScreen {
     setActive(): void {
         super.setActive();
 
-        if (this.baseGame.music) return;
-        this.baseGame.music = document.createElement("audio");
-        this.baseGame.music.src = "/assets/sounds/music.mp3";
-        this.baseGame.music.addEventListener("ended", () => {
-            this.baseGame.music?.play();
-        });
-
-        if (localStorage.getItem("music") === "true") {
-            this.baseGame.music.play();
+        if (this.baseGame.soundManager.music.enabled) {
+            this.baseGame.soundManager.music.play();
         } else {
             musicToggle.src = "/assets/images/music_off.png";
         }
 
-        if (localStorage.getItem("sounds") === "true") {
-            this.baseGame.sounds = true;
-        } else {
-            soundToggle.src = "/assets/images/sound_off.png";
-        }
+        const soundsEnabled = this.baseGame.soundManager.sounds.enabled;
+        soundToggle.src = `/assets/images/sound_${soundsEnabled ? "on" : "off"}.png`;
     }
 
     setTheme(theme: string): void {
@@ -58,27 +48,17 @@ export class LobbyScreen extends OnuScreen {
     async initialize() {
         const connection = this.baseGame.connection;
         musicToggle.addEventListener("click", () => {
-            if (this.baseGame.music?.paused) {
-                this.baseGame.music.play();
-                musicToggle.src = "/assets/images/music_on.png";
-                localStorage.setItem("music", "true");
-            } else {
-                this.baseGame.music?.pause();
-                musicToggle.src = "/assets/images/music_off.png";
-                localStorage.setItem("music", "false");
-            }
+            const musicEnabled = this.baseGame.soundManager.music.toggle();
+
+            let sprite = `/assets/images/music_${musicEnabled ? "on" : "off"}.png`;
+            musicToggle.src = sprite;
         });
 
         soundToggle.addEventListener("click", () => {
-            if (!this.baseGame.sounds) {
-                this.baseGame.sounds = true;
-                soundToggle.src = "/assets/images/sound_on.png";
-                localStorage.setItem("sounds", "true");
-            } else {
-                this.baseGame.sounds = false;
-                soundToggle.src = "/assets/images/sound_off.png";
-                localStorage.setItem("sounds", "false");
-            }
+            const soundsEnabled = this.baseGame.soundManager.sounds.toggle();
+
+            let sprite = `/assets/images/sound_${soundsEnabled ? "on" : "off"}.png`;
+            soundToggle.src = sprite;
         });
 
         themeToggle.addEventListener("click", () => {
