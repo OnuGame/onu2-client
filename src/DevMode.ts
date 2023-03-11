@@ -1,3 +1,6 @@
+import { BaseGame } from "./main";
+import { Notification } from "./Notification";
+
 export class DevMode {
     public static instance: DevMode;
     private static devLog: string[] = [];
@@ -28,6 +31,24 @@ export class DevMode {
 
             element.style.display = "none";
             element.click();
+        });
+
+        document.querySelector("#reportLog")!.addEventListener("click", async () => {
+            const log = DevMode.devLog.join("\n");
+
+            const backendUrl = BaseGame.instance.connection.getServerURL().replace("ws", "http");
+            const reportUrl = backendUrl + "/report";
+
+            const request = await fetch(reportUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+                body: log,
+            });
+
+            if (request.status == 200) new Notification("Log successfully reported!", 5000).show();
+            else new Notification(`Something went wrong: ${await request.text()}`, 5000).show();
         });
     }
 

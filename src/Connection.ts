@@ -67,6 +67,10 @@ export class Connection extends EventSystem {
         this.address = url;
     }
 
+    public getServerURL() {
+        return this.address;
+    }
+
     public send(event: BaseEvent) {
         if (this.ws.readyState != this.ws.OPEN) throw new Error("Websocket is not open.");
         DevMode.log("↗️", event.stringify());
