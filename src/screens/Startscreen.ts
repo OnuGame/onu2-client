@@ -64,7 +64,8 @@ export class Startscreen extends OnuScreen {
             if (import.meta.env.MODE == "production") {
                 server = location.href.replace("http", "ws");
             } else {
-                server = "ws://localhost:3000";
+                server = `ws://localhost:3000`;
+                if (!(await connection.test(server))) server = "wss://onu.lebogo.me"; // Fallback server if local dev server is offline
             }
 
             connection.setServerURL(server);

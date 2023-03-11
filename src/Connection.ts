@@ -15,6 +15,21 @@ export class Connection extends EventSystem {
         });
     }
 
+    public async test(url: string) {
+        url = url.split("//")[1];
+
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 200);
+
+        try {
+            const request = await fetch("http://" + url + "/ping", { signal: controller.signal });
+            clearTimeout(timeout);
+            return request.status == 200;
+        } catch (e) {
+            return false;
+        }
+    }
+
     public connect() {
         if (this.ws) {
             DevMode.log("⌛", `Found existing connection. Closing old connection...`);
