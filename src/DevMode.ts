@@ -37,7 +37,8 @@ export class DevMode {
             const log = DevMode.devLog.join("\n");
 
             const backendUrl = BaseGame.instance.connection.getServerURL().replace("ws", "http");
-            const reportUrl = backendUrl + "/report";
+
+            const reportUrl = (backendUrl + "/report").replace("//report", "/report");
 
             const request = await fetch(reportUrl, {
                 method: "POST",
