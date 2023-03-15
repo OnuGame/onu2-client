@@ -43,7 +43,7 @@ function sortCards(cards: Card[]) {
         .filter((card) => card.color.color === "y")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
     const etcCards = cards
-        .filter((card) => card.color.color === null)
+        .filter((card) => card.color.color === "none")
         .sort((a, b) => a.type.charCodeAt(0) - b.type.charCodeAt(0));
 
     return rCards
