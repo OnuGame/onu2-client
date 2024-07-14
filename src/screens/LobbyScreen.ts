@@ -13,6 +13,7 @@ const musicToggle = document.querySelector("#musicToggle") as HTMLImageElement;
 const soundToggle = document.querySelector("#soundToggle") as HTMLImageElement;
 const themeToggle = document.querySelector("#themeToggle") as HTMLImageElement;
 const discordInvite = document.querySelector("#discordInvite") as HTMLAnchorElement;
+const specateButton = document.querySelector("#specateButton") as HTMLButtonElement;
 
 export class LobbyScreen extends OnuScreen {
     players: { username: string; uuid: string; cardCount: number }[];
@@ -74,6 +75,22 @@ export class LobbyScreen extends OnuScreen {
         discordInvite.addEventListener("click", () => {
             window.open("https://discord.gg/NHgXTXNGfR", "_blank");
         });
+
+        specateButton.addEventListener("click", () => {
+            localStorage.setItem("spectate", this.baseGame.lobbycode!);
+            window.open(location.href, "_blank");
+        });
+
+        const spectate = localStorage.getItem("spectate");
+        if (spectate != null) {
+            musicToggle.remove();
+            soundToggle.remove();
+            themeToggle.remove();
+            discordInvite.remove();
+            specateButton.remove();
+
+            localStorage.removeItem("spectate");
+        }
 
         connection.registerEvent<UpdateAdminEvent>("UpdateAdminEvent", ({ uuid }) => {
             this.baseGame.isAdmin = this.baseGame.uuid === uuid;

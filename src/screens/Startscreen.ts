@@ -1,4 +1,5 @@
-import { JoinedLobbyEvent, JoinLobbyEvent } from "@lebogo/onu2-shared";
+import { JoinedLobbyEvent, JoinLobbyEvent, SpectateLobbyEvent } from "@lebogo/onu2-shared";
+import { Connection } from "../Connection";
 import { BaseGame } from "../main";
 import { Notification } from "../Notification";
 import { OnuScreen } from "./OnuScreen";
@@ -15,6 +16,16 @@ export class Startscreen extends OnuScreen {
 
     async initialize() {
         const connection = this.baseGame.connection;
+
+        const spectate = localStorage.getItem("spectate");
+        if (spectate != null) {
+            await this.connectToServer(connection);
+
+            this.baseGame.connection.send(new SpectateLobbyEvent(spectate));
+            this.baseGame.screenManager.setActiveScreen("lobbyScreen");
+
+            return;
+        }
 
         usernameInput.addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
@@ -60,17 +71,8 @@ export class Startscreen extends OnuScreen {
                 return;
             }
 
-            let server = "";
-            if (import.meta.env.MODE == "production") {
-                server = location.href.replace("http", "ws");
-            } else {
-                server = `ws://localhost:3000`;
-                if (!(await connection.test(server))) server = "wss://onu.lebogo.me"; // Fallback server if local dev server is offline
-            }
+            await this.connectToServer(connection);
 
-            connection.setServerURL(server);
-
-            await connection.connect();
             connection.send(new JoinLobbyEvent(this.baseGame.lobbycode, this.baseGame.username));
         });
 
@@ -78,5 +80,19 @@ export class Startscreen extends OnuScreen {
             this.baseGame.uuid = uuid;
             this.baseGame.screenManager.setActiveScreen("lobbyScreen");
         });
+    }
+
+    async connectToServer(connection: Connection) {
+        let server = "";
+        if (import.meta.env.MODE == "production") {
+            server = location.href.replace("http", "ws");
+        } else {
+            server = `ws://localhost:3000`;
+            if (!(await connection.test(server))) server = "wss://onu.lebogo.me"; // Fallback server if local dev server is offline
+        }
+
+        connection.setServerURL(server);
+
+        await connection.connect();
     }
 }
